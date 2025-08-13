@@ -19,9 +19,9 @@ Crea un nuevo usuario en la bd.
 
   {
       "usuario": "usuariotest",
-      "email": "email@test.com",
-      "nombre": "nombretest",
-      "contra": "contratest"
+      "email": "usuario@test.com",
+      "nombre": "usuariotest",
+      "contra": "usuariotest"
   }
 #+end_src
 
@@ -29,10 +29,10 @@ Crea un nuevo usuario en la bd.
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 13 Aug 2025 03:25:36 GMT
+Date: Wed, 13 Aug 2025 06:38:29 GMT
 Content-Length: 87
 
-usuariotest $2a$15$TJM5/UOV/DhXL4ScM2CUH.cNO9AH4b/hbAWFrN9T/S7.A53K/J99S email@test.com
+usuario5 $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG usuario5@test.com
 #+end_src
 
 Get Usuario
@@ -44,17 +44,13 @@ get /usuario/1
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 13 Aug 2025 03:44:14 GMT
-Content-Length: 353
+Date: Wed, 13 Aug 2025 07:37:14 GMT
+Content-Length: 188
 
 {
   "id": 1,
-  "creado": "2025-08-12T23:46:01-03:00",
-  "ult_mod": "2025-08-12T23:46:01-03:00",
-  "estado": "ACTIVO",
   "usuario": "fran",
-  "contra": "fran1@gmail.com",
-  "email": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
+  "email": "fran1@gmail.com",
   "nombre": null,
   "telefono": null,
   "direccion": null,
@@ -63,14 +59,59 @@ Content-Length: 353
 }
 #+end_src
 
-Login de usuario
+Usuarios
 #+begin_src verb 
-post /login
-Content-Type: application/json; charset=utf-8
+get /usuario
+#+end_src
 
-{
-    "user": "fran3",
-    "pass": "123"
-}
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Wed, 13 Aug 2025 07:37:10 GMT
+Content-Length: 608
+
+[
+  {
+    "id": 1,
+    "usuario": "fran",
+    "email": "fran1@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "ADMIN",
+    "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+  },
+  {
+    "id": 2,
+    "usuario": "fran2",
+    "email": "fran2@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "EMPLEADO",
+    "permisos": "USUARIO_LISTAR"
+  },
+  {
+    "id": 3,
+    "usuario": "fran3",
+    "email": "fran3@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "USUARIO",
+    "permisos": null
+  },
+  {
+    "id": 4,
+    "usuario": "usuario5",
+    "email": "usuario5@test.com",
+    "nombre": "usuariotest",
+    "telefono": null,
+    "direccion": null,
+    "rol": null,
+    "permisos": null
+  }
+]
 #+end_src
 

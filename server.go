@@ -1,15 +1,14 @@
 package main
 
 import (
-	"os"
+	"strings"	
 	"fmt"
+    "database/sql"
+	"os"
 	"net/http"
     "regexp"
-    "database/sql"
-	"reflect"
-	"errors"
 	"time"
-	"strings"
+	dao "fran/dao"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 	log "github.com/sirupsen/logrus"
@@ -32,11 +31,7 @@ type Usuario struct {
 
 type UsuarioRol struct {
 	Id int `json:"id" form:"id"`
-	Creado string`json:"creado" form:"creado"`
-	Ult_mod string `json:"ult_mod" form:"ult_mod"`
-	Estado string `json:"estado" form:"estado"`	
     Usuario string `json:"usuario" form:"usuario"`
-	Contra  string `json:"contra" form:"contra"`
 	Email string `json:"email" form:"email"`
 	Nombre *string `json:"nombre" form:"nombre"`
 	Telefono *string `json:"telefono" form:"telefono"`
@@ -67,6 +62,7 @@ func main() {
 	e := echo.New()
 	e.POST("/registrar", registrar)
 	e.GET("/usuario/:id", buscarUsuario)
+	e.GET("/usuario", listarUsuarios)
 	log.Debugf("Fallo al iniciar server: %v", e.Start(":4567"))
 }
 
@@ -81,95 +77,64 @@ func registrar(c echo.Context) error {
         return c.JSON(http.StatusBadRequest, map[string]string{"error": "Formulario Incorrecto"})
     }
 	if len(u.Usuario) < 5 || !re.MatchString(u.Usuario) || len(u.Contra) < 8 || !re.MatchString(u.Contra) || !reEmail.MatchString(u.Email) {		
-		log.Debugf("Error: %v\nApiRes: %v", u, http.StatusBadRequest)
+		log.Debugf("%v\nApiRes: %v", u, http.StatusBadRequest)
         return c.JSON(http.StatusBadRequest, map[string]string{"error": "Formulario Incorrecto"})
 	}
 	u.Contra, err = encriptar(u.Contra)
 	if err == nil {		
-		log.Debugf("ApiRes: %v", http.StatusBadRequest)
-		
-		alta(u)
+		if err = alta(u); err != nil{
+			log.Errorf("registrar: %v", err)
+		}		
+		log.Debugf("ApiRes: %v", http.StatusOK)
 		return c.String(http.StatusOK, u.Usuario + " " + u.Contra + " " +u.Email)
 	} else {		
-		log.Debugf("Error: %v\nApiRes: %v", u, http.StatusBadRequest)
+		log.Debugf("%v\nApiRes: %v", u, http.StatusBadRequest)
         return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Hubo un error interno del sistema"})
 	}
 }
 
 func buscarUsuario(c echo.Context) error {
 	id := c.Param("id")
-	query := "SELECT u.*, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE u.id = ? GROUP BY u.id"
+	query := "SELECT u.id, u.usuario, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE u.id = ? GROUP BY u.id"
 	fila := db.QueryRow(query, id)
 	if fila == nil {
 		log.Fatal(fila)
 	}
 	var u UsuarioRol
-	if err := scanStruct(fila, &u); err != nil {
+	if err := dao.ScanStruct(fila, &u); err != nil {
 		log.Fatal(err)
 	}
-
     return c.JSON(http.StatusOK, u)
 }
 
-func alta(u any){
-	tabla, campos, valores, err := structAstring(u)
+func listarUsuarios(c echo.Context) error {
+	query := "SELECT u.id, u.usuario, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id GROUP BY u.id"
+	filas, err := db.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
-	camposStr := strings.Join(campos, ",")
+	var u UsuarioRol
+	usuarios := [] any {}
+	usuarios, err = dao.ScanSlice(filas, u)
+	if err != nil {
+		log.Fatal(err)
+	}
+    return c.JSON(http.StatusOK, usuarios)
+}
+
+func alta(u any) error{
+	tabla, campos, valores, err := dao.StructAstring(u)
+	if err != nil {
+		log.Fatal(err)
+	}
 	placeholders := strings.Repeat("?,", len(campos))
+	camposStr := strings.Join(campos, ",")
 	placeholders = placeholders[:len(placeholders)-1]
 	
 	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", tabla, camposStr, placeholders)
 	_, err = db.Exec(query, valores...)
 	if(err != nil){		
-		log.Debugf("Ups %v",err)
+		log.Errorf("alta: %v",err)
 	}
-}
-
-func structAstring(s any) (tabla string, campos []string, valores []any, error error) {
-	t := reflect.TypeOf(s)
-	v := reflect.ValueOf(s)
-	
-	if t.Kind() != reflect.Struct {
-		log.Debugf("Error: No es struct")
-		return "", nil, nil, errors.New("Debe ser un struct")
-	}
-	
-	tabla = t.Name()
-	campos = []string{}
-	valores = []any{}
-	
-	for i := 0; i < t.NumField(); i++ {
-		campos = append(campos, strings.ToLower(t.Field(i).Name))
-		f := v.Field(i)
-		if f.Kind() == reflect.Ptr {
-			if f.IsNil() {
-				valores = append(valores, nil)
-			} else {
-				valores = append(valores, f.Elem().Interface())
-			}
-		} else {
-			valores = append(valores, f.Interface())
-		}
-	}
-	return
-}
-
-
-func scanStruct(row *sql.Row, dest any) error {
-    v := reflect.ValueOf(dest)
-    if v.Kind() != reflect.Ptr || v.IsNil() {
-        return errors.New("Error: dest debe ser un struct")
-    }
-    v = v.Elem()
-    if v.Kind() != reflect.Struct {
-        return errors.New("Error: dest debe ser un struct")
-    }
-
-    campos := make([]any, v.NumField())
-    for i := 0; i < v.NumField(); i++ {
-        campos[i] = v.Field(i).Addr().Interface()
-    }
-    return row.Scan(campos...)
+	return err
 }
