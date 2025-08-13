@@ -1,0 +1,76 @@
+#+TITLE: Microservicio Login - API
+#+AUTHOR: fran
+#+LANGUAGE: es
+#+STARTUP: content indent showeverything
+#+DESCRIPTION: API del microservicio Login
+#+PROPERTY: header-args:verb :wrap src ob-verb-response
+#+OPTIONS: results:nil
+
+* API :verb:
+template http://localhost:4567
+Accept: application/json
+
+*** TODO crear los roles del usuario.
+** Registrarse
+Crea un nuevo usuario en la bd.
+#+begin_src verb
+  post /registrar
+  Content-Type: application/json; charset=utf-8
+
+  {
+      "usuario": "usuariotest",
+      "email": "email@test.com",
+      "nombre": "nombretest",
+      "contra": "contratest"
+  }
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 13 Aug 2025 03:25:36 GMT
+Content-Length: 87
+
+usuariotest $2a$15$TJM5/UOV/DhXL4ScM2CUH.cNO9AH4b/hbAWFrN9T/S7.A53K/J99S email@test.com
+#+end_src
+
+Get Usuario
+#+begin_src verb 
+get /usuario/1
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Wed, 13 Aug 2025 03:44:14 GMT
+Content-Length: 353
+
+{
+  "id": 1,
+  "creado": "2025-08-12T23:46:01-03:00",
+  "ult_mod": "2025-08-12T23:46:01-03:00",
+  "estado": "ACTIVO",
+  "usuario": "fran",
+  "contra": "fran1@gmail.com",
+  "email": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
+  "nombre": null,
+  "telefono": null,
+  "direccion": null,
+  "rol": "ADMIN",
+  "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+}
+#+end_src
+
+Login de usuario
+#+begin_src verb 
+post /login
+Content-Type: application/json; charset=utf-8
+
+{
+    "user": "fran3",
+    "pass": "123"
+}
+#+end_src
+

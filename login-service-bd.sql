@@ -1,0 +1,43 @@
+DROP DATABASE IF EXISTS ServicioLoginDB;
+CREATE DATABASE ServicioLoginDB;
+USE ServicioLoginDB;
+
+CREATE TABLE Usuario(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ult_mod TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE current_timestamp(),
+    estado ENUM("ACTIVO","INACTIVO") DEFAULT "ACTIVO",
+
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
+    contra VARCHAR(500) NOT NULL,
+    nombre VARCHAR(50) NULL,
+    telefono VARCHAR(50) NULL,
+    direccion VARCHAR(100) NULL    
+);
+
+CREATE TABLE Rol(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Permiso(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE UsuarioRol (
+    usuario_id INT NOT NULL,
+    rol_id INT NOT NULL,
+    PRIMARY KEY (usuario_id, rol_id),
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (rol_id) REFERENCES Rol(id) ON DELETE CASCADE
+);
+
+CREATE TABLE RolPermiso (
+    rol_id INT NOT NULL,
+    permiso_id INT NOT NULL,
+    PRIMARY KEY (rol_id, permiso_id),
+    FOREIGN KEY (rol_id) REFERENCES Rol(id) ON DELETE CASCADE,
+    FOREIGN KEY (permiso_id) REFERENCES Permiso(id) ON DELETE CASCADE
+);
