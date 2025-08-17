@@ -34,12 +34,19 @@ type UsuarioRol struct {
 		Rol *string `json:"rol" form:"rol"`
 		Permisos * string `json:"permisos" form:"permisos"`
 }
+
+type LoginRequest struct {
+		Usuario string `json:"usuario"`
+		Contra string `json:"contra"`
+}
+
 const (
 		MsjResErrInterno = "Error interno en el sistema"
 		MsjResErrFormIncorrecto = "Formulario incorrecto"
 		MsjResErrUsrNoExiste = "Usuario no encontrado"
-		MsjResErrCredInvalidas ="Credenciales invalidas"		
-		MsjResErrNoAutorizado ="No autorizado"
+		MsjResErrCredInvalidas = "Credenciales invalidas"		
+		MsjResErrNoAutorizado = "No autorizado"
+		MsjResRegExitoso = "Registro exitoso"
 )
 
 var err error = nil
@@ -88,18 +95,14 @@ func Registrar(c echo.Context) error {
 						return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
 				}
 				log.Debugf("ApiRes: %v", http.StatusOK)
-				return c.JSON(http.StatusOK, map[string]string{"mensaje": "Registro Exitoso"})
+				return c.JSON(http.StatusOK, map[string]string{"mensaje": MsjResRegExitoso})
 		} else {		
 				log.Debugf("%v\nApiRes: %v", u, http.StatusBadRequest)
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
 		}
 }
 
-func Login(c echo.Context) error{		
-		type LoginRequest struct {
-				Usuario string `json:"usuario"`
-				Contra string `json:"contra"`
-		}
+func Login(c echo.Context) error{
 		log.Debug("login")
 		var req LoginRequest
 		if err := c.Bind(&req); err != nil {				
