@@ -2,9 +2,10 @@
 #+AUTHOR: fran
 #+LANGUAGE: es
 #+STARTUP: content indent showeverything
+#+PROPERTY: header-args:sql :engine mysql :dbhost localhost :dbuser root :dbpassword root :database ServicioLoginDB
 
 * SQL
-#+PROPERTY: header-args:sql :engine mysql :dbhost localhost :dbuser root :dbpassword root :database ServicioLoginDB
+
 #+name: my-query
 #+begin_src sql
   SELECT * FROM Usuario;

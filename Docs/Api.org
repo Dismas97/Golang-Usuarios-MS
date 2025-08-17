@@ -4,6 +4,7 @@
 #+STARTUP: content indent showeverything
 #+DESCRIPTION: API del microservicio Login
 #+PROPERTY: header-args:verb :wrap src ob-verb-response
+#+OPTIONS: results:t
 * API :verb:
 template http://localhost:4567
 Accept: application/json
