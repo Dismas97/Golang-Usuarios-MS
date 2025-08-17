@@ -45,6 +45,8 @@ func main() {
 		grupoP.Use(controles.FiltroSuperAdmin)
 		grupoP.GET("/usuario", controles.ListarUsuarios)
 		grupoP.GET("/usuario/:id", controles.BuscarUsuario)
+		grupoP.DELETE("/usuario/:id", controles.BajaUsuario)
+		grupoP.POST("/usuario/:id", controles.ModificarUsuario)
 		
 		log.Errorf("Server: %v", e.Start(":4567"))
 }

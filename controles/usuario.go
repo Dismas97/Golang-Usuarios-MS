@@ -1,8 +1,6 @@
 package controles
 
 import (
-		"strings"	
-		"fmt"
 		"net/http"
 		"fran/sqlstruct"
 		"fran/utils"
@@ -47,6 +45,8 @@ const (
 		MsjResErrCredInvalidas = "Credenciales invalidas"		
 		MsjResErrNoAutorizado = "No autorizado"
 		MsjResRegExitoso = "Registro exitoso"
+		MsjResModExitoso = "Actualizacion exitosa"
+		MsjResBajaExitosa = "Baja exitosa"
 )
 
 var err error = nil
@@ -90,7 +90,7 @@ func Registrar(c echo.Context) error {
 		
 		u.Contra, err = encriptar(u.Contra)
 		if err == nil {		
-				if err = alta(u); err != nil{
+				if err = sqlstruct.Alta(u); err != nil{
 						log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 						return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
 				}
@@ -185,24 +185,40 @@ func ListarUsuarios(c echo.Context) error {
 		return c.JSON(http.StatusOK, usuarios)
 }
 
-func alta(u any) error{
-		log.Debugf("alta: %v", u)
-		tabla, campos, valores, err := sqlstruct.StructAstring(u)
-		if err != nil {
-				log.Error(err)
-				return err
+func ModificarUsuario(c echo.Context) error {		
+		var u Usuario
+		log.Debug("ModificarUsuario")
+		id := c.Param("id")
+		if  err := c.Bind(&u); err != nil || len(u.Usuario) < 5 || !utils.REAlfaNum.MatchString(u.Usuario) || len(u.Contra) < 8 || !utils.REAlfaNum.MatchString(u.Contra) || !utils.REEmail.MatchString(u.Email) {		
+				log.Debugf("ApiRes: %v", http.StatusBadRequest)
+				return c.JSON(http.StatusBadRequest, map[string]string{"mensaje":MsjResErrFormIncorrecto})
 		}
-		placeholders := strings.Repeat("?,", len(campos))
-		camposStr := strings.Join(campos, ",")
-		placeholders = placeholders[:len(placeholders)-1]
-	
-		query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", tabla, camposStr, placeholders)
-		_, err = utils.BD.Exec(query, valores...)
-		if(err != nil){
-				log.Error(err)
-				return err
+		
+		u.Contra, err = encriptar(u.Contra)
+		if err == nil {		
+				if err = sqlstruct.Modificar(u,id); err != nil{
+						log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+						return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
+				}
+				log.Debugf("ApiRes: %v", http.StatusOK)
+				return c.JSON(http.StatusOK, map[string]string{"mensaje": MsjResModExitoso})
+		} else {		
+				log.Debugf("%v\nApiRes: %v", u, http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
 		}
-		return nil
+}
+
+func BajaUsuario(c echo.Context) error {
+		log.Debug("BajaUsuario")
+		id := c.Param("id")
+		
+		if err = sqlstruct.Baja("Usuario", id); err == nil {
+				log.Debugf("ApiRes: %v", http.StatusOK)
+				return c.JSON(http.StatusOK, map[string]string{"mensaje": MsjResBajaExitosa})
+		} else {		
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
+		}
 }
 
 func getUsuario(campo string, valor string) (UsuarioRol, error) {

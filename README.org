@@ -16,4 +16,7 @@ Este proyecto incluye el servidor y la bd correspondiente
 * TODO Pendiente
 ** TODO Administrar roles y permisos desde la API.
 ** TODO Agregar roles a usuarios desde la API
-** TODO Eliminar y modificar usuarios desde la API.
+** DONE Eliminar usuarios desde la API.
+CLOSED: [2025-08-17 dom 20:43]
+** DONE Modificar usuarios desde la API.
+CLOSED: [2025-08-17 dom 20:43]

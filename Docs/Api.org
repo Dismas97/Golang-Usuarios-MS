@@ -15,10 +15,10 @@ Crea un nuevo usuario en la bd.
   Content-Type: application/json; charset=utf-8
 
   {
-      "usuario": "usuarioooo",
-      "email": "usuarioooo@test.com",
-      "nombre": "usuariooootest",
-      "contra": "usuariooootest"
+  "usuario": "testeowachin",
+  "email": "testeomanito@test.com",
+  "nombre": "eaeaea",
+  "contra": "easdasdaeaea"
   }
 #+end_src
 
@@ -26,11 +26,11 @@ Crea un nuevo usuario en la bd.
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:19:47 GMT
+Date: Sun, 17 Aug 2025 22:59:13 GMT
 Content-Length: 31
 
 {
-  "mensaje": "Registro Exitoso"
+  "mensaje": "Registro exitoso"
 }
 #+end_src
 
@@ -40,8 +40,8 @@ Content-Length: 31
   Content-Type: application/json; charset=utf-8
 
   {
-      "usuario": "fran2",
-      "contra": "123"
+  "usuario": "fran",
+  "contra": "123"
   }
 #+end_src
 
@@ -49,45 +49,29 @@ Content-Length: 31
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:34:33 GMT
-Content-Length: 247
+Date: Sun, 17 Aug 2025 23:37:53 GMT
+Content-Length: 349
 
 {
-  "permisos": "USUARIO_LISTAR",
-  "rol": "EMPLEADO",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw"
+  "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
+  "rol": "ADMIN",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0Nzc0NzMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xLpYq-3liaKlxIrPUrVRTgKrpkZcF6ak4wL3O-oRCAU"
 }
 #+end_src
 
 ** Usuarios
 Default paginado
 #+begin_src verb 
-  get /p/usuario/3
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw
-#+end_src
-
-#+RESULTS:
-#+begin_src ob-verb-response
-HTTP/1.1 401 Unauthorized
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 17 Aug 2025 15:34:52 GMT
-Content-Length: 13
-
-No autorizado
-#+end_src
-
-Paginado args
-#+begin_src verb 
-  get /p/usuario?diferencia=0&limite=10
-    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDc1OTMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xS-LLLQC33E6YalHw8ZtMQuzamqEnGit7_yLEfYKncY
+  get /p/usuario
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzQ2NTAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.FkLxJeWsIC4xeogYB7CYgJ7bcz-skGSEM5kwMQtR6Xg
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:20:17 GMT
-Content-Length: 1116
+Date: Sun, 17 Aug 2025 23:05:57 GMT
+Content-Length: 899
 
 [
   {
@@ -125,27 +109,112 @@ Content-Length: 1116
   },
   {
     "id": 4,
-    "usuario": "usuario5",
-    "contra": "$2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG",
-    "email": "usuario5@test.com",
-    "nombre": "usuariotest",
-    "telefono": null,
-    "direccion": null,
-    "rol": null,
-    "permisos": null
-  },
-  {
-    "id": 5,
-    "usuario": "usuarioooo",
-    "contra": "$2a$15$M0dcwowdrSY8gtl4x8vE1.2YgCVImz6uG6n6PfKBcCKejpCB6uMhq",
-    "email": "usuarioooo@test.com",
-    "nombre": "usuariooootest",
+    "usuario": "testeowachin",
+    "contra": "$2a$15$IfsIVOVNil5uJKBufgxHj.DKDYdA5p3HcX07QdJULk.jcxy8CReUC",
+    "email": "testeomanito@test.com",
+    "nombre": "eaeaea",
     "telefono": null,
     "direccion": null,
     "rol": null,
     "permisos": null
   }
 ]
+#+end_src
+
+Paginado args
+#+begin_src verb 
+  get /p/usuario?diferencia=0&limite=10
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzU1NDEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.ZtFxbDhLpSCOoqTGjw6RLKmwM0n2F74dpey8FLoItzY
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 17 Aug 2025 23:42:41 GMT
+Content-Length: 683
+
+[
+  {
+    "id": 1,
+    "usuario": "fran",
+    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
+    "email": "fran1@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "ADMIN",
+    "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+  },
+  {
+    "id": 2,
+    "usuario": "fran2",
+    "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
+    "email": "fran2@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "EMPLEADO",
+    "permisos": "USUARIO_LISTAR"
+  },
+  {
+    "id": 3,
+    "usuario": "fran3",
+    "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
+    "email": "fran3@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "USUARIO",
+    "permisos": null
+  }
+]
+#+end_src
+
+** Modificar
+#+begin_src verb 
+  post /p/usuario/4
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzU1NDEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.ZtFxbDhLpSCOoqTGjw6RLKmwM0n2F74dpey8FLoItzY
+  
+
+  {
+  "usuario": "testeowachin",
+  "email": "testeomanito@test.com",
+  "nombre": "eaeaea",
+  "contra": "easdasdaeaea"
+  }
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 17 Aug 2025 23:05:50 GMT
+Content-Length: 36
+
+{
+  "mensaje": "Actualizacion exitosa"
+}
+#+end_src
+
+** Eliminar
+
+#+begin_src verb
+  delete /p/usuario/4
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0Nzc0NzMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xLpYq-3liaKlxIrPUrVRTgKrpkZcF6ak4wL3O-oRCAU
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+Date: Sun, 17 Aug 2025 23:39:07 GMT
+Content-Length: 42
+
+{
+  "mensaje": "Error interno en el sistema"
+}
 #+end_src
 
 * SQL
