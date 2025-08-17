@@ -18,21 +18,23 @@ Crea un nuevo usuario en la bd.
   Content-Type: application/json; charset=utf-8
 
   {
-      "usuario": "usuariotest",
-      "email": "usuario@test.com",
-      "nombre": "usuariotest",
-      "contra": "usuariotest"
+      "usuario": "usuarioooo",
+      "email": "usuarioooo@test.com",
+      "nombre": "usuariooootest",
+      "contra": "usuariooootest"
   }
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 13 Aug 2025 06:38:29 GMT
-Content-Length: 87
+Content-Type: application/json
+Date: Sun, 17 Aug 2025 15:19:47 GMT
+Content-Length: 31
 
-usuario5 $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG usuario5@test.com
+{
+  "mensaje": "Registro Exitoso"
+}
 #+end_src
 
 #+begin_src verb
@@ -40,7 +42,7 @@ usuario5 $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG usuario5@t
   Content-Type: application/json; charset=utf-8
 
   {
-      "usuario": "fran",
+      "usuario": "fran2",
       "contra": "123"
   }
 #+end_src
@@ -49,54 +51,63 @@ usuario5 $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG usuario5@t
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Fri, 15 Aug 2025 19:30:20 GMT
-Content-Length: 349
+Date: Sun, 17 Aug 2025 15:34:33 GMT
+Content-Length: 247
 
 {
-  "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
-  "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyODk4MjAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.W7V9UP3gTU-zQ-f-4AuiXNJCC4hNBXsxHF70iogxFg4"
+  "permisos": "USUARIO_LISTAR",
+  "rol": "EMPLEADO",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw"
 }
 #+end_src
 
-Get Usuario
-#+begin_src verb 
-  get /p/usuario/2
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyODk3MTMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.VjMfuSoK69ydkmY3oMMxEhXvbaGfi2Vkjkxo9GMLBUY
+Chequeo ruta
+#+begin_src verb
+get
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 200 OK
+HTTP/1.1 404 Not Found
 Content-Type: application/json
-Date: Fri, 15 Aug 2025 19:29:54 GMT
-Content-Length: 217
+Date: Sun, 17 Aug 2025 15:31:05 GMT
+Content-Length: 24
 
 {
-  "id": 2,
-  "usuario": "fran2",
-  "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
-  "email": "fran2@gmail.com",
-  "nombre": null,
-  "telefono": null,
-  "direccion": null,
-  "rol": "EMPLEADO",
-  "permisos": "USUARIO_LISTAR"
+  "message": "Not Found"
 }
+#+end_src
+
+
+Get Usuario
+#+begin_src verb 
+  get /p/usuario/3
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 401 Unauthorized
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 17 Aug 2025 15:34:52 GMT
+Content-Length: 13
+
+No autorizado
 #+end_src
 
 Usuarios
 #+begin_src verb 
-  get /p/usuario?diferencia=0&limite=2
-    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyODk4MjAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.W7V9UP3gTU-zQ-f-4AuiXNJCC4hNBXsxHF70iogxFg4
+  get /p/usuario?diferencia=0&limite=10
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDc1OTMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xS-LLLQC33E6YalHw8ZtMQuzamqEnGit7_yLEfYKncY
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Fri, 15 Aug 2025 19:30:30 GMT
-Content-Length: 479
+Date: Sun, 17 Aug 2025 15:20:17 GMT
+Content-Length: 1116
 
 [
   {
@@ -120,9 +131,43 @@ Content-Length: 479
     "direccion": null,
     "rol": "EMPLEADO",
     "permisos": "USUARIO_LISTAR"
+  },
+  {
+    "id": 3,
+    "usuario": "fran3",
+    "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
+    "email": "fran3@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "USUARIO",
+    "permisos": null
+  },
+  {
+    "id": 4,
+    "usuario": "usuario5",
+    "contra": "$2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG",
+    "email": "usuario5@test.com",
+    "nombre": "usuariotest",
+    "telefono": null,
+    "direccion": null,
+    "rol": null,
+    "permisos": null
+  },
+  {
+    "id": 5,
+    "usuario": "usuarioooo",
+    "contra": "$2a$15$M0dcwowdrSY8gtl4x8vE1.2YgCVImz6uG6n6PfKBcCKejpCB6uMhq",
+    "email": "usuarioooo@test.com",
+    "nombre": "usuariooootest",
+    "telefono": null,
+    "direccion": null,
+    "rol": null,
+    "permisos": null
   }
 ]
 #+end_src
+
 * SQL
 #+PROPERTY: header-args:sql :engine mysql :dbhost localhost :dbuser root :dbpassword root :database ServicioLoginDB
 #+name: my-query
