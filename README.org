@@ -3,10 +3,10 @@
 #+LANGUAGE: es
 #+STARTUP: content indent showeverything
 #+DESCRIPTION: API del microservicio Login
-#+PROPERTY: header-args:verb :wrap src ob-verb-response
 #+OPTIONS: results:nil
 
 * API :verb:
+#+PROPERTY: header-args:verb :wrap src ob-verb-response
 template http://localhost:4567
 Accept: application/json
 
@@ -35,46 +35,74 @@ Content-Length: 87
 usuario5 $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG usuario5@test.com
 #+end_src
 
-Get Usuario
-#+begin_src verb 
-get /usuario/1
+#+begin_src verb
+  post /login
+  Content-Type: application/json; charset=utf-8
+
+  {
+      "usuario": "fran",
+      "contra": "123"
+  }
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 13 Aug 2025 07:37:14 GMT
-Content-Length: 188
+Date: Fri, 15 Aug 2025 19:30:20 GMT
+Content-Length: 349
 
 {
-  "id": 1,
-  "usuario": "fran",
-  "email": "fran1@gmail.com",
+  "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
+  "rol": "ADMIN",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyODk4MjAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.W7V9UP3gTU-zQ-f-4AuiXNJCC4hNBXsxHF70iogxFg4"
+}
+#+end_src
+
+Get Usuario
+#+begin_src verb 
+  get /p/usuario/2
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyODk3MTMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.VjMfuSoK69ydkmY3oMMxEhXvbaGfi2Vkjkxo9GMLBUY
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Fri, 15 Aug 2025 19:29:54 GMT
+Content-Length: 217
+
+{
+  "id": 2,
+  "usuario": "fran2",
+  "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
+  "email": "fran2@gmail.com",
   "nombre": null,
   "telefono": null,
   "direccion": null,
-  "rol": "ADMIN",
-  "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+  "rol": "EMPLEADO",
+  "permisos": "USUARIO_LISTAR"
 }
 #+end_src
 
 Usuarios
 #+begin_src verb 
-get /usuario
+  get /p/usuario?diferencia=0&limite=2
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyODk4MjAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.W7V9UP3gTU-zQ-f-4AuiXNJCC4hNBXsxHF70iogxFg4
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 13 Aug 2025 07:37:10 GMT
-Content-Length: 608
+Date: Fri, 15 Aug 2025 19:30:30 GMT
+Content-Length: 479
 
 [
   {
     "id": 1,
     "usuario": "fran",
+    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
     "email": "fran1@gmail.com",
     "nombre": null,
     "telefono": null,
@@ -85,33 +113,27 @@ Content-Length: 608
   {
     "id": 2,
     "usuario": "fran2",
+    "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
     "email": "fran2@gmail.com",
     "nombre": null,
     "telefono": null,
     "direccion": null,
     "rol": "EMPLEADO",
     "permisos": "USUARIO_LISTAR"
-  },
-  {
-    "id": 3,
-    "usuario": "fran3",
-    "email": "fran3@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "USUARIO",
-    "permisos": null
-  },
-  {
-    "id": 4,
-    "usuario": "usuario5",
-    "email": "usuario5@test.com",
-    "nombre": "usuariotest",
-    "telefono": null,
-    "direccion": null,
-    "rol": null,
-    "permisos": null
   }
 ]
 #+end_src
+* SQL
+#+PROPERTY: header-args:sql :engine mysql :dbhost localhost :dbuser root :dbpassword root :database ServicioLoginDB
+#+name: my-query
+#+begin_src sql
+  SELECT * FROM Usuario;
+#+end_src
 
+#+RESULTS: my-query
+| id | creado              | ult_mod             | estado | usuario  | email             | contra                                                       | nombre      | telefono | direccion |
+|----+---------------------+---------------------+--------+----------+-------------------+--------------------------------------------------------------+-------------+----------+-----------|
+|  1 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran     | fran1@gmail.com   | $2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2 | NULL        | NULL     | NULL      |
+|  2 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran2    | fran2@gmail.com   | $2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO | NULL        | NULL     | NULL      |
+|  3 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran3    | fran3@gmail.com   | $2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u | NULL        | NULL     | NULL      |
+|  4 | 2025-08-13 03:38:29 | 2025-08-13 03:38:29 | ACTIVO | usuario5 | usuario5@test.com | $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG | usuariotest | NULL     | NULL      |

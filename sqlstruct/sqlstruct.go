@@ -1,4 +1,4 @@
-package dao
+package sqlstruct
 import 	(
 	"reflect"
 	"errors"
