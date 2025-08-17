@@ -1,184 +1,19 @@
-#+TITLE: Microservicio Login - API
+#+TITLE: README
 #+AUTHOR: fran
 #+LANGUAGE: es
 #+STARTUP: content indent showeverything
-#+DESCRIPTION: API del microservicio Login
+#+DESCRIPTION: Declaracion de intenciones en el proyecto
 #+OPTIONS: results:nil
 
-* API :verb:
-#+PROPERTY: header-args:verb :wrap src ob-verb-response
-template http://localhost:4567
-Accept: application/json
+* INTRODUCCIÓN
 
-*** TODO crear los roles del usuario.
-** Registrarse
-Crea un nuevo usuario en la bd.
-#+begin_src verb
-  post /registrar
-  Content-Type: application/json; charset=utf-8
+Esto debería ser una implementación de un microservicio de autenticación y administración de usuarios.
 
-  {
-      "usuario": "usuarioooo",
-      "email": "usuarioooo@test.com",
-      "nombre": "usuariooootest",
-      "contra": "usuariooootest"
-  }
-#+end_src
+Debería proveer mecanismos para la creación, modificación y eliminación de usuarios. Asignarles roles y permisos. Devolver un token con sus credenciales para ser utilizadas por otros servicios.
 
-#+RESULTS:
-#+begin_src ob-verb-response
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:19:47 GMT
-Content-Length: 31
+Este proyecto incluye el servidor y la bd correspondiente
 
-{
-  "mensaje": "Registro Exitoso"
-}
-#+end_src
-
-#+begin_src verb
-  post /login
-  Content-Type: application/json; charset=utf-8
-
-  {
-      "usuario": "fran2",
-      "contra": "123"
-  }
-#+end_src
-
-#+RESULTS:
-#+begin_src ob-verb-response
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:34:33 GMT
-Content-Length: 247
-
-{
-  "permisos": "USUARIO_LISTAR",
-  "rol": "EMPLEADO",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw"
-}
-#+end_src
-
-Chequeo ruta
-#+begin_src verb
-get
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw
-#+end_src
-
-#+RESULTS:
-#+begin_src ob-verb-response
-HTTP/1.1 404 Not Found
-Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:31:05 GMT
-Content-Length: 24
-
-{
-  "message": "Not Found"
-}
-#+end_src
-
-
-Get Usuario
-#+begin_src verb 
-  get /p/usuario/3
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDg0NzMsInBlcm1pc29zIjoiVVNVQVJJT19MSVNUQVIiLCJyb2wiOiJFTVBMRUFETyIsInVzdWFyaW8iOiJmcmFuMiJ9.eZ0dB88wrAYqUIfGNVEJZJGoJnez0az6R2Fkte-7Ppw
-#+end_src
-
-#+RESULTS:
-#+begin_src ob-verb-response
-HTTP/1.1 401 Unauthorized
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 17 Aug 2025 15:34:52 GMT
-Content-Length: 13
-
-No autorizado
-#+end_src
-
-Usuarios
-#+begin_src verb 
-  get /p/usuario?diferencia=0&limite=10
-    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NDc1OTMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xS-LLLQC33E6YalHw8ZtMQuzamqEnGit7_yLEfYKncY
-#+end_src
-
-#+RESULTS:
-#+begin_src ob-verb-response
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Sun, 17 Aug 2025 15:20:17 GMT
-Content-Length: 1116
-
-[
-  {
-    "id": 1,
-    "usuario": "fran",
-    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
-    "email": "fran1@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "ADMIN",
-    "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
-  },
-  {
-    "id": 2,
-    "usuario": "fran2",
-    "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
-    "email": "fran2@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "EMPLEADO",
-    "permisos": "USUARIO_LISTAR"
-  },
-  {
-    "id": 3,
-    "usuario": "fran3",
-    "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
-    "email": "fran3@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "USUARIO",
-    "permisos": null
-  },
-  {
-    "id": 4,
-    "usuario": "usuario5",
-    "contra": "$2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG",
-    "email": "usuario5@test.com",
-    "nombre": "usuariotest",
-    "telefono": null,
-    "direccion": null,
-    "rol": null,
-    "permisos": null
-  },
-  {
-    "id": 5,
-    "usuario": "usuarioooo",
-    "contra": "$2a$15$M0dcwowdrSY8gtl4x8vE1.2YgCVImz6uG6n6PfKBcCKejpCB6uMhq",
-    "email": "usuarioooo@test.com",
-    "nombre": "usuariooootest",
-    "telefono": null,
-    "direccion": null,
-    "rol": null,
-    "permisos": null
-  }
-]
-#+end_src
-
-* SQL
-#+PROPERTY: header-args:sql :engine mysql :dbhost localhost :dbuser root :dbpassword root :database ServicioLoginDB
-#+name: my-query
-#+begin_src sql
-  SELECT * FROM Usuario;
-#+end_src
-
-#+RESULTS: my-query
-| id | creado              | ult_mod             | estado | usuario  | email             | contra                                                       | nombre      | telefono | direccion |
-|----+---------------------+---------------------+--------+----------+-------------------+--------------------------------------------------------------+-------------+----------+-----------|
-|  1 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran     | fran1@gmail.com   | $2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2 | NULL        | NULL     | NULL      |
-|  2 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran2    | fran2@gmail.com   | $2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO | NULL        | NULL     | NULL      |
-|  3 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran3    | fran3@gmail.com   | $2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u | NULL        | NULL     | NULL      |
-|  4 | 2025-08-13 03:38:29 | 2025-08-13 03:38:29 | ACTIVO | usuario5 | usuario5@test.com | $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG | usuariotest | NULL     | NULL      |
+* TODO Pendiente
+** TODO Administrar roles y permisos desde la API.
+** TODO Agregar roles a usuarios desde la API
+** TODO Eliminar y modificar usuarios desde la API.
