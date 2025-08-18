@@ -34,7 +34,9 @@ func main() {
 		}
 		
 		e := echo.New()
-		e.Use(middleware.Logger())
+		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+				Format: "${time_rfc3339} ${method} ${uri} ${status} ${error}\n",
+		}))
 				
 		e.POST("/login", controles.Login)		
 		e.POST("/registrar", controles.Registrar)
@@ -46,7 +48,9 @@ func main() {
 		grupoP.GET("/usuario", controles.ListarUsuarios)
 		grupoP.GET("/usuario/:id", controles.BuscarUsuario)
 		grupoP.DELETE("/usuario/:id", controles.BajaUsuario)
-		grupoP.POST("/usuario/:id", controles.ModificarUsuario)
+		grupoP.PUT("/usuario/:id", controles.ModificarUsuario)
+		grupoP.POST("/permiso", controles.AltaRolOPermiso)		
+		grupoP.POST("/rol", controles.AltaRolOPermiso)
 		
 		log.Errorf("Server: %v", e.Start(":4567"))
 }

@@ -38,6 +38,16 @@ type LoginRequest struct {
 		Contra string `json:"contra"`
 }
 
+type RolYPermiso struct {
+		Id int `json:"id" form:"id"`
+		Nombre string `json:"nombre"`
+}
+
+type AuxJoin struct {
+		Id1 int `json:"id1" form:"id1"`
+		Id2 int `json:"id2" form:"id2"`
+}
+
 const (
 		MsjResErrInterno = "Error interno en el sistema"
 		MsjResErrFormIncorrecto = "Formulario incorrecto"
@@ -90,7 +100,7 @@ func Registrar(c echo.Context) error {
 		
 		u.Contra, err = encriptar(u.Contra)
 		if err == nil {		
-				if err = sqlstruct.Alta(u); err != nil{
+				if _,err = sqlstruct.Alta(u); err != nil{
 						log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 						return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":MsjResErrInterno})
 				}
@@ -142,11 +152,53 @@ func FiltroCheck(c echo.Context) error {
 		permisos := claims["permisos"].(string)
 
 		return c.JSON(http.StatusOK, map[string]string{
-				"message": "Acceso a contenido principal",
+				"mensaje": "Filtro Check",
 				"usuario":    usuario,
 				"rol":    rol,
 				"permisos":    permisos,
 		})
+}
+
+
+/*
+func AsignarRolUsuario(c echo.Context) error {
+		
+}
+func EliminarRolUsuario(c echo.Context) error {
+		
+}
+
+func EliminarRolPermiso(c echo.Context) error {
+		
+}
+
+func AsignarRolPermiso(c echo.Context) error {
+		
+}
+*/
+func AltaRolOPermiso(c echo.Context) error {
+		tabla := utils.IndiceMayuscula(c.Path()[3:],0)
+		
+		var aux map[string]string
+		c.Bind(&aux)
+		if  aux["nombre"] == ""  {		
+				log.Debugf("ApiRes: %v", http.StatusBadRequest)
+				return c.JSON(http.StatusBadRequest, map[string]string{"mensaje":MsjResErrFormIncorrecto})
+		}
+		query := "INSERT INTO "+tabla+" (nombre) VALUES (?)"
+		res, err := utils.BD.Exec(query, aux["nombre"])
+		if(err != nil){
+				log.Errorf("AltaRolOPermiso: %v",err)
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"error":MsjResErrInterno} )
+		}		
+		resid, err :=  res.LastInsertId()
+		if(err != nil){
+				log.Errorf("AltaRolOPermiso: %v",err)
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"error":MsjResErrInterno} )
+		}
+		return c.JSON(http.StatusOK,  resid)
 }
 
 func BuscarUsuario(c echo.Context) error {

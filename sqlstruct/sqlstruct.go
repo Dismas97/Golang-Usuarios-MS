@@ -75,6 +75,7 @@ func ScanStruct(row *sql.Row, dest any) error {
 }
 
 func ScanSlice(rows *sql.Rows, tipo any) (retorno []any, err error) {
+		defer rows.Close()
 		t, err := validarStruct(tipo)
 		if err != nil {
 				return nil, err
@@ -116,7 +117,8 @@ func Modificar(u any, id string) error{
 		}
 		result := strings.Join(auxiliar, ", ")
 	
-		query := fmt.Sprintf("UPDATE %s SET %s WHERE id = %s", tabla, result, id)
+		query := fmt.Sprintf("UPDATE %s SET %s WHERE id = ?", tabla, result)
+		valores = append(valores, id)
 		_, err = utils.BD.Exec(query, valores...)
 		if(err != nil){
 				log.Error(err)
@@ -125,7 +127,7 @@ func Modificar(u any, id string) error{
 		return nil
 }
 
-func Baja(tabla string, id string) error {
+func Baja(tabla string, id string) error {		
 		log.Debugf("alta: %s", id)		
 		query := fmt.Sprintf("DELETE FROM %s WHERE id = ?", tabla)
 		_, err = utils.BD.Exec(query, id)
@@ -133,26 +135,30 @@ func Baja(tabla string, id string) error {
 				log.Error(err)
 				return err
 		}
-		return nil
-		
+		return nil		
 }
 
-func Alta(u any) error{
+func Alta(u any) (id int64, err error){		
 		log.Debugf("alta: %v", u)
 		tabla, campos, valores, err := StructAstring(u)
 		if err != nil {
 				log.Error(err)
-				return err
+				return -1, err
 		}
 		placeholders := strings.Repeat("?,", len(campos))
 		camposStr := strings.Join(campos, ",")
 		placeholders = placeholders[:len(placeholders)-1]
 	
 		query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", tabla, camposStr, placeholders)
-		_, err = utils.BD.Exec(query, valores...)
+		res, err := utils.BD.Exec(query, valores...)
 		if(err != nil){
 				log.Error(err)
-				return err
+				return -1, err
 		}
-		return nil
+		resid, err :=  res.LastInsertId()
+		if(err != nil){
+				log.Error(err)
+				return -1, err
+		}
+		return resid, nil
 }

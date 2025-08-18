@@ -8,8 +8,8 @@
 * API :verb:
 template http://localhost:4567
 Accept: application/json
-
-** Registrar
+** Usuarios
+*** Alta
 Crea un nuevo usuario en la bd.
 #+begin_src verb
   post /registrar
@@ -35,7 +35,7 @@ Content-Length: 31
 }
 #+end_src
 
-** Login
+*** Login
 #+begin_src verb
   post /login
   Content-Type: application/json; charset=utf-8
@@ -50,17 +50,17 @@ Content-Length: 31
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 23:37:53 GMT
+Date: Mon, 18 Aug 2025 19:44:48 GMT
 Content-Length: 349
 
 {
   "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
   "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0Nzc0NzMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xLpYq-3liaKlxIrPUrVRTgKrpkZcF6ak4wL3O-oRCAU"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NDk4ODgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.VS07Z4YZHqvnN4m3hb5DfuJFD1bj1U1sSVbVUk0CAGg"
 }
 #+end_src
 
-** Usuarios
+*** Consultar
 Default paginado
 #+begin_src verb 
   get /p/usuario
@@ -172,7 +172,7 @@ Content-Length: 683
 ]
 #+end_src
 
-** Modificar
+*** Modificar
 #+begin_src verb 
   post /p/usuario/4
   Content-Type: application/json; charset=utf-8
@@ -199,8 +199,7 @@ Content-Length: 36
 }
 #+end_src
 
-** Eliminar
-
+*** Baja
 #+begin_src verb
   delete /p/usuario/4
   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0Nzc0NzMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xLpYq-3liaKlxIrPUrVRTgKrpkZcF6ak4wL3O-oRCAU
@@ -216,6 +215,53 @@ Content-Length: 42
 {
   "mensaje": "Error interno en el sistema"
 }
+#+end_src
+
+** Permisos
+
+*** Alta
+#+begin_src verb
+  post /p/permiso
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NDg5NTksInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.1TWxUvba7bFsGrNLx-uWQcdAH9u-Akzlyye40I5-PZw
+
+  {
+  "nombre": "Permiso desde la api"
+  }
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 18 Aug 2025 19:29:26 GMT
+Content-Length: 2
+
+5
+#+end_src
+
+** Rol
+
+*** Alta
+
+#+begin_src verb
+  post /p/rol
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NDk4ODgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.VS07Z4YZHqvnN4m3hb5DfuJFD1bj1U1sSVbVUk0CAGg
+
+  {
+  "nombre": "Rol desde la api"
+  }
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 18 Aug 2025 19:44:57 GMT
+Content-Length: 2
+
+4
 #+end_src
 
 * SQL

@@ -14,9 +14,15 @@ Debería proveer mecanismos para la creación, modificación y eliminación de u
 Este proyecto incluye el servidor y la bd correspondiente
 
 * TODO Pendiente
-** TODO Administrar roles y permisos desde la API.
-** TODO Agregar roles a usuarios desde la API
-** DONE Eliminar usuarios desde la API.
+** TODO Alta Rol
+** TODO Alta Permiso
+** TODO Baja Rol
+** TODO Baja Permiso
+** TODO Asignar Permiso a Rol
+** TODO Quitar Permiso a Rol
+** TODO Agregar Rol a Usuario
+** TODO Quitar Rol a Usuario
+** DONE Eliminar usuarios
 CLOSED: [2025-08-17 dom 20:43]
-** DONE Modificar usuarios desde la API.
+** DONE Modificar usuarios
 CLOSED: [2025-08-17 dom 20:43]
