@@ -42,7 +42,7 @@ func StructAstring(s any) (tabla string, campos []string, valores []any, error e
 		tabla = t.Name()
 		campos = make([]string, t.NumField())
 		valores = make([]any, t.NumField())	
-		for i := 0; i < t.NumField(); i++ {
+		for i := range campos {
 				campos[i] = strings.ToLower(t.Field(i).Name)
 				f := v.Field(i)
 				if f.Kind() == reflect.Ptr {
@@ -68,7 +68,7 @@ func ScanStruct(row *sql.Row, dest any) error {
 				return errors.New("dest debe ser un struct")
 		}
 		campos := make([]any, v.NumField())
-		for i := 0; i < v.NumField(); i++ {
+		for i := range campos {
 				campos[i] = v.Field(i).Addr().Interface()
 		}
 		return row.Scan(campos...)
@@ -87,7 +87,7 @@ func ScanSlice(rows *sql.Rows, tipo any) (retorno []any, err error) {
 				elem := ptr.Elem()         // T
         
 				campos := make([]any, elem.NumField())
-				for i := 0; i < elem.NumField(); i++ {
+				for i := range campos {
 						campos[i] = elem.Field(i).Addr().Interface() //campos[i]=*T.campoi
 				}
 		

@@ -27,11 +27,11 @@ Crea un nuevo usuario en la bd.
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 22:59:13 GMT
-Content-Length: 31
+Date: Tue, 19 Aug 2025 00:44:42 GMT
+Content-Length: 27
 
 {
-  "mensaje": "Registro exitoso"
+  "mensaje": "Alta exitosa"
 }
 #+end_src
 
@@ -50,29 +50,103 @@ Content-Length: 31
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Mon, 18 Aug 2025 19:44:48 GMT
+Date: Tue, 19 Aug 2025 00:44:58 GMT
 Content-Length: 349
 
 {
   "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
   "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NDk4ODgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.VS07Z4YZHqvnN4m3hb5DfuJFD1bj1U1sSVbVUk0CAGg"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1Njc4OTgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.E2KyiTIhCYWfwvimy-aIU1Cw2quHnC6Y3gHLlKYZrpM"
 }
 #+end_src
 
-*** Consultar
-Default paginado
-#+begin_src verb 
-  get /p/usuario
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzQ2NTAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.FkLxJeWsIC4xeogYB7CYgJ7bcz-skGSEM5kwMQtR6Xg
+
+*** Alta permiso
+#+begin_src verb
+  post /p/usuario/6/rol
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+
+  {
+  "rol_id": 2
+  }
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 23:05:57 GMT
-Content-Length: 899
+Date: Tue, 19 Aug 2025 00:45:51 GMT
+Content-Length: 36
+
+{
+  "mensaje": "Modificación exitosa"
+}
+#+end_src
+*** Baja Permiso
+#+begin_src verb
+  delete /p/usuario/6/rol
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+
+  {
+  "rol_id": 2
+  }
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 19 Aug 2025 00:46:03 GMT
+Content-Length: 27
+
+{
+  "mensaje": "Baja exitosa"
+}
+#+end_src
+
+*** Buscar
+#+begin_src verb 
+  get /p/usuario/6
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1Njc4OTgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.E2KyiTIhCYWfwvimy-aIU1Cw2quHnC6Y3gHLlKYZrpM
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 19 Aug 2025 00:46:08 GMT
+Content-Length: 255
+
+{
+  "datos": {
+    "id": 6,
+    "usuario": "testeowachin",
+    "contra": "$2a$15$/Ceoh6YccLc.1m1MGIS8hO9zzH9q8vresgkvSZdZYpKmuadtsK8bK",
+    "email": "testeomanito@test.com",
+    "nombre": "eaeaea",
+    "telefono": null,
+    "direccion": null,
+    "rol": null,
+    "permisos": null
+  },
+  "mensaje": "Peticion exitosa"
+}
+#+end_src
+
+*** Paginado
+#+begin_src verb 
+  get /p/usuario
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjM3MjEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.mulEYVqzcG_itph5dCtDoWyt5ArFZ2PIGmJSKJc6SH4
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 18 Aug 2025 23:36:35 GMT
+Content-Length: 705
 
 [
   {
@@ -84,7 +158,7 @@ Content-Length: 899
     "telefono": null,
     "direccion": null,
     "rol": "ADMIN",
-    "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+    "permisos": "Permiso desde la api, USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
   },
   {
     "id": 2,
@@ -106,17 +180,6 @@ Content-Length: 899
     "telefono": null,
     "direccion": null,
     "rol": "USUARIO",
-    "permisos": null
-  },
-  {
-    "id": 4,
-    "usuario": "testeowachin",
-    "contra": "$2a$15$IfsIVOVNil5uJKBufgxHj.DKDYdA5p3HcX07QdJULk.jcxy8CReUC",
-    "email": "testeomanito@test.com",
-    "nombre": "eaeaea",
-    "telefono": null,
-    "direccion": null,
-    "rol": null,
     "permisos": null
   }
 ]
@@ -130,46 +193,46 @@ Paginado args
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Sun, 17 Aug 2025 23:42:41 GMT
-Content-Length: 683
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  Date: Sun, 17 Aug 2025 23:42:41 GMT
+  Content-Length: 683
 
-[
-  {
-    "id": 1,
-    "usuario": "fran",
-    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
-    "email": "fran1@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "ADMIN",
-    "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
-  },
-  {
-    "id": 2,
-    "usuario": "fran2",
-    "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
-    "email": "fran2@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "EMPLEADO",
-    "permisos": "USUARIO_LISTAR"
-  },
-  {
-    "id": 3,
-    "usuario": "fran3",
-    "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
-    "email": "fran3@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "USUARIO",
-    "permisos": null
-  }
-]
+  [
+    {
+      "id": 1,
+      "usuario": "fran",
+      "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
+      "email": "fran1@gmail.com",
+      "nombre": null,
+      "telefono": null,
+      "direccion": null,
+      "rol": "ADMIN",
+      "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+    },
+    {
+      "id": 2,
+      "usuario": "fran2",
+      "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
+      "email": "fran2@gmail.com",
+      "nombre": null,
+      "telefono": null,
+      "direccion": null,
+      "rol": "EMPLEADO",
+      "permisos": "USUARIO_LISTAR"
+    },
+    {
+      "id": 3,
+      "usuario": "fran3",
+      "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
+      "email": "fran3@gmail.com",
+      "nombre": null,
+      "telefono": null,
+      "direccion": null,
+      "rol": "USUARIO",
+      "permisos": null
+    }
+  ]
 #+end_src
 
 *** Modificar
@@ -177,7 +240,7 @@ Content-Length: 683
   post /p/usuario/4
   Content-Type: application/json; charset=utf-8
   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzU1NDEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.ZtFxbDhLpSCOoqTGjw6RLKmwM0n2F74dpey8FLoItzY
-  
+
 
   {
   "usuario": "testeowachin",
@@ -189,36 +252,35 @@ Content-Length: 683
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Sun, 17 Aug 2025 23:05:50 GMT
-Content-Length: 36
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  Date: Sun, 17 Aug 2025 23:05:50 GMT
+  Content-Length: 36
 
-{
-  "mensaje": "Actualizacion exitosa"
-}
+  {
+    "mensaje": "Actualizacion exitosa"
+  }
 #+end_src
 
 *** Baja
 #+begin_src verb
-  delete /p/usuario/4
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0Nzc0NzMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.xLpYq-3liaKlxIrPUrVRTgKrpkZcF6ak4wL3O-oRCAU
+  delete /p/usuario/5
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjQ1MzksInBlcm1pc29zIjoiUGVybWlzbyBkZXNkZSBsYSBhcGksIFVTVUFSSU9fQUxUQSwgVVNVQVJJT19CQUpBLCBVU1VBUklPX0xJU1RBUiwgVVNVQVJJT19NT0RJRklDQVIiLCJyb2wiOiJBRE1JTiIsInVzdWFyaW8iOiJmcmFuIn0.I77Vj6ZTNNGzlutYPrmomaUhzMoKHDG5LfUgmhzi06w
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 500 Internal Server Error
+HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sun, 17 Aug 2025 23:39:07 GMT
-Content-Length: 42
+Date: Mon, 18 Aug 2025 23:52:04 GMT
+Content-Length: 27
 
 {
-  "mensaje": "Error interno en el sistema"
+  "mensaje": "Baja exitosa"
 }
 #+end_src
 
 ** Permisos
-
 *** Alta
 #+begin_src verb
   post /p/permiso
@@ -232,18 +294,16 @@ Content-Length: 42
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Mon, 18 Aug 2025 19:29:26 GMT
-Content-Length: 2
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  Date: Mon, 18 Aug 2025 19:29:26 GMT
+  Content-Length: 2
 
-5
+  5
 #+end_src
 
 ** Rol
-
 *** Alta
-
 #+begin_src verb
   post /p/rol
   Content-Type: application/json; charset=utf-8
@@ -256,25 +316,54 @@ Content-Length: 2
 
 #+RESULTS:
 #+begin_src ob-verb-response
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  Date: Mon, 18 Aug 2025 19:44:57 GMT
+  Content-Length: 2
+
+  4
+#+end_src
+*** Alta permiso
+#+begin_src verb
+  post /p/rol/1
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+
+  {
+  "permiso_id": 5
+  }
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Mon, 18 Aug 2025 19:44:57 GMT
-Content-Length: 2
+Date: Tue, 19 Aug 2025 00:21:22 GMT
+Content-Length: 36
 
-4
+{
+  "mensaje": "Modificación exitosa"
+}
+#+end_src
+*** Baja Permiso
+#+begin_src verb
+  delete /p/rol/1
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+
+  {
+  "permiso_id": 5
+  }
 #+end_src
 
-* SQL
-#+PROPERTY: header-args:sql :engine mysql :dbhost localhost :dbuser root :dbpassword root :database ServicioLoginDB
-#+name: my-query
-#+begin_src sql
-  SELECT * FROM Usuario;
-#+end_src
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 19 Aug 2025 00:21:45 GMT
+Content-Length: 27
 
-#+RESULTS: my-query
-| id | creado              | ult_mod             | estado | usuario  | email             | contra                                                       | nombre      | telefono | direccion |
-|----+---------------------+---------------------+--------+----------+-------------------+--------------------------------------------------------------+-------------+----------+-----------|
-|  1 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran     | fran1@gmail.com   | $2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2 | NULL        | NULL     | NULL      |
-|  2 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran2    | fran2@gmail.com   | $2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO | NULL        | NULL     | NULL      |
-|  3 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran3    | fran3@gmail.com   | $2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u | NULL        | NULL     | NULL      |
-|  4 | 2025-08-13 03:38:29 | 2025-08-13 03:38:29 | ACTIVO | usuario5 | usuario5@test.com | $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG | usuariotest | NULL     | NULL      |
+{
+  "mensaje": "Baja exitosa"
+}
+#+end_src

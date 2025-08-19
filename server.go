@@ -49,8 +49,12 @@ func main() {
 		grupoP.GET("/usuario/:id", controles.BuscarUsuario)
 		grupoP.DELETE("/usuario/:id", controles.BajaUsuario)
 		grupoP.PUT("/usuario/:id", controles.ModificarUsuario)
-		grupoP.POST("/permiso", controles.AltaRolOPermiso)		
+		grupoP.DELETE("/usuario/:id/rol", controles.BajaUsuarioRol)
+		grupoP.POST("/usuario/:id/rol", controles.AltaUsuarioRol)
+		grupoP.POST("/permiso", controles.AltaRolOPermiso)
 		grupoP.POST("/rol", controles.AltaRolOPermiso)
+		grupoP.POST("/rol/:id", controles.AltaRolPermiso)
+		grupoP.DELETE("/rol/:id", controles.BajaRolPermiso)
 		
 		log.Errorf("Server: %v", e.Start(":4567"))
 }
