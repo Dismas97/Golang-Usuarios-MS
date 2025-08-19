@@ -41,6 +41,17 @@ type LoginRequest struct {
 		Contra string `json:"contra"`
 }
 
+
+func chequeoQueryData(fuente map[string]any, campos []string) error {
+		for i := range campos {
+				log.Debug(fuente[campos[i]])
+				if fuente[campos[i]] == nil || fuente[campos[i]] == ""{
+						return errors.New("campo "+campos[i]+" no exportado")
+				}
+		}		
+		return nil
+}
+
 func getUsuario(campo string, valor string) (UsuarioRol, error) {
 		log.Debugf("getUsuario(%v,%v)", campo, valor)
 		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE "+campo+" = ? GROUP BY u.id"
@@ -151,18 +162,6 @@ func Login(c echo.Context) error{
 		log.Debugf("ApiRes: %v", http.StatusOK)
         return c.JSON(http.StatusOK, map[string]string{"token": token, "rol":*usuario.Rol, "permisos":*usuario.Permisos})
 }
-
-
-func chequeoQueryData(fuente map[string]any, campos []string) error {
-		for i := range campos {
-				log.Debug(fuente[campos[i]])
-				if fuente[campos[i]] == nil || fuente[campos[i]] == ""{
-						return errors.New("campo "+campos[i]+" no exportado")
-				}
-		}		
-		return nil
-}
-
 
 func AltaUsuarioRol(c echo.Context) error {
 		var aux map[string]any

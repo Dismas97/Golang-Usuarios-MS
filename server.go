@@ -1,32 +1,54 @@
 package main
 
 import (
-	"database/sql"
-	"fran/controles"
-	"fran/utils"
-	"os"
-	"time"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/labstack/echo-jwt/v4"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	log "github.com/sirupsen/logrus"
+		"fmt"
+		"os"
+		"time"
+		"database/sql"
+		"encoding/json"
+		"fran/controles"
+		"fran/utils"
+		_ "github.com/go-sql-driver/mysql"
+		"github.com/labstack/echo-jwt/v4"
+		"github.com/labstack/echo/v4"
+		"github.com/labstack/echo/v4/middleware"
+		log "github.com/sirupsen/logrus"
 )
 
+type Config struct {
+		ServerPort int `json:"server_port"`
+		DBPort int `json:"db_port"`
+		DB string `json:"db"`
+		MaxCon int `json:"max_con"`
+		DBUsuario string `json:"db_usuario"`
+		DBContra string `json:"db_contra"`
+		JWTSecret string `json:"jwt_secret"`
+}
 var err error = nil
 
 func main() {
 		log.SetOutput(os.Stdout)
 		log.SetLevel(log.DebugLevel)
-		dsn := "root:root@tcp(127.0.0.1:3306)/ServicioLoginDB?charset=utf8mb4&parseTime=True&loc=Local"
+		
+		file, _ := os.Open("config.json")
+		defer file.Close()
+
+		var config Config
+		decoder := json.NewDecoder(file)
+		_ = decoder.Decode(&config)
+
+		log.Debug(config)
+		dsn := fmt.Sprintf("%s:%s@tcp(127.0.0.1:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",config.DBUsuario, config.DBContra, config.DBPort, config.DB)
+
+		utils.JWTSecret = []byte(config.JWTSecret)
 		utils.BD, err = sql.Open("mysql", dsn)
 		if err != nil {
 				log.Fatalf("Error al abrir conexión: %v", err)
 		}
 		defer utils.BD.Close()
 
-		utils.BD.SetMaxOpenConns(25)
-		utils.BD.SetMaxIdleConns(25)
+		utils.BD.SetMaxOpenConns(config.MaxCon)
+		utils.BD.SetMaxIdleConns(config.MaxCon)
 		utils.BD.SetConnMaxLifetime(5 * time.Minute)
 
 		if err := utils.BD.Ping(); err != nil {
@@ -37,12 +59,12 @@ func main() {
 		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 				Format: "${time_rfc3339} ${method} ${uri} ${status} ${error}\n",
 		}))
-				
-		e.POST("/login", controles.Login)		
+		
+		e.POST("/login", controles.Login)
 		e.POST("/registrar", controles.Registrar)
 		e.GET("",controles.FiltroCheck)
 		
-		grupoP := e.Group("/p")		
+		grupoP := e.Group("/p")
 		grupoP.Use(echojwt.JWT(utils.JWTSecret))
 		grupoP.Use(controles.FiltroSuperAdmin)
 		grupoP.GET("/usuario", controles.ListarUsuarios)
@@ -56,5 +78,5 @@ func main() {
 		grupoP.POST("/rol/:id", controles.AltaRolPermiso)
 		grupoP.DELETE("/rol/:id", controles.BajaRolPermiso)
 		
-		log.Errorf("Server: %v", e.Start(":4567"))
+		log.Errorf("Server: %v", e.Start(fmt.Sprintf(":%d",config.ServerPort)))
 }

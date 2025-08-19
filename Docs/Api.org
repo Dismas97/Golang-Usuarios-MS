@@ -50,13 +50,13 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Tue, 19 Aug 2025 00:44:58 GMT
+Date: Tue, 19 Aug 2025 01:36:50 GMT
 Content-Length: 349
 
 {
   "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
   "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1Njc4OTgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.E2KyiTIhCYWfwvimy-aIU1Cw2quHnC6Y3gHLlKYZrpM"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzEwMTAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.IbulroaLN7y3TbkBSu3rC2txQaS0sGcV0Uim3w8o60Y"
 }
 #+end_src
 
@@ -109,14 +109,14 @@ Content-Length: 27
 *** Buscar
 #+begin_src verb 
   get /p/usuario/6
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1Njc4OTgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.E2KyiTIhCYWfwvimy-aIU1Cw2quHnC6Y3gHLlKYZrpM
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzEwMTAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.IbulroaLN7y3TbkBSu3rC2txQaS0sGcV0Uim3w8o60Y
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Tue, 19 Aug 2025 00:46:08 GMT
+Date: Tue, 19 Aug 2025 01:37:30 GMT
 Content-Length: 255
 
 {
@@ -138,51 +138,65 @@ Content-Length: 255
 *** Paginado
 #+begin_src verb 
   get /p/usuario
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjM3MjEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.mulEYVqzcG_itph5dCtDoWyt5ArFZ2PIGmJSKJc6SH4
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzEwMTAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.IbulroaLN7y3TbkBSu3rC2txQaS0sGcV0Uim3w8o60Y
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Mon, 18 Aug 2025 23:36:35 GMT
-Content-Length: 705
+Date: Tue, 19 Aug 2025 01:37:41 GMT
+Content-Length: 938
 
-[
-  {
-    "id": 1,
-    "usuario": "fran",
-    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
-    "email": "fran1@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "ADMIN",
-    "permisos": "Permiso desde la api, USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
-  },
-  {
-    "id": 2,
-    "usuario": "fran2",
-    "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
-    "email": "fran2@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "EMPLEADO",
-    "permisos": "USUARIO_LISTAR"
-  },
-  {
-    "id": 3,
-    "usuario": "fran3",
-    "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
-    "email": "fran3@gmail.com",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "USUARIO",
-    "permisos": null
-  }
-]
+{
+  "datos": [
+    {
+      "id": 1,
+      "usuario": "fran",
+      "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
+      "email": "fran1@gmail.com",
+      "nombre": null,
+      "telefono": null,
+      "direccion": null,
+      "rol": "ADMIN",
+      "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR"
+    },
+    {
+      "id": 2,
+      "usuario": "fran2",
+      "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
+      "email": "fran2@gmail.com",
+      "nombre": null,
+      "telefono": null,
+      "direccion": null,
+      "rol": "EMPLEADO",
+      "permisos": "USUARIO_LISTAR"
+    },
+    {
+      "id": 3,
+      "usuario": "fran3",
+      "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
+      "email": "fran3@gmail.com",
+      "nombre": null,
+      "telefono": null,
+      "direccion": null,
+      "rol": "USUARIO",
+      "permisos": null
+    },
+    {
+      "id": 6,
+      "usuario": "testeowachin",
+      "contra": "$2a$15$/Ceoh6YccLc.1m1MGIS8hO9zzH9q8vresgkvSZdZYpKmuadtsK8bK",
+      "email": "testeomanito@test.com",
+      "nombre": "eaeaea",
+      "telefono": null,
+      "direccion": null,
+      "rol": null,
+      "permisos": null
+    }
+  ],
+  "mensaje": "Peticion exitosa"
+}
 #+end_src
 
 Paginado args

@@ -1,0 +1,9 @@
+{
+    "server_port": 4567,
+    "db_port": 3306,
+    "db": "ServicioLoginDB",
+    "max_con": 50,
+    "db_usuario": "root",
+    "db_contra": "root",
+    "jwt_secret": "clave-secreta-123"
+}
