@@ -13,15 +13,34 @@ Debería proveer mecanismos para la creación, modificación y eliminación de u
 
 Este proyecto incluye el servidor y la bd correspondiente
 
+* Config ejemplo
+#+begin_src json :tangle config.json
+  {
+    "server_port": 4567,
+    "db": "ServicioLoginDB",
+    "db_port": 3306,
+    "db_usuario": "root",
+    "db_contra": "root",
+    "max_con": 50,
+    "jwt_secret": "clave-secreta-123"
+}
+#+end_src
+
 * TODO Pendiente
 ** TODO Alta Rol
 ** TODO Alta Permiso
 ** TODO Baja Rol
 ** TODO Baja Permiso
-** TODO Asignar Permiso a Rol
-** TODO Quitar Permiso a Rol
-** TODO Agregar Rol a Usuario
-** TODO Quitar Rol a Usuario
+** TODO Listar Rol
+** TODO Listar Permiso
+** DONE Asignar Permiso a Rol
+CLOSED: [2025-08-18 lun 22:52]
+** DONE Quitar Permiso a Rol
+CLOSED: [2025-08-18 lun 22:52]
+** DONE Agregar Rol a Usuario
+CLOSED: [2025-08-18 lun 22:51]
+** DONE Quitar Rol a Usuario
+CLOSED: [2025-08-18 lun 22:51]
 ** DONE Eliminar usuarios
 CLOSED: [2025-08-17 dom 20:43]
 ** DONE Modificar usuarios
