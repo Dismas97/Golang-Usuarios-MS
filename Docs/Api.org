@@ -14,7 +14,7 @@ Crea un nuevo usuario en la bd.
 #+begin_src verb
   post /registrar
   Content-Type: application/json; charset=utf-8
-
+  
   {
   "usuario": "testeowachin",
   "email": "testeomanito@test.com",
@@ -36,7 +36,10 @@ Content-Length: 27
 #+end_src
 
 *** Login
-#+begin_src verb
+:properties:
+:Verb-Store: res-login
+:end:
+#+begin_src verb 
   post /login
   Content-Type: application/json; charset=utf-8
 
@@ -50,22 +53,21 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Tue, 19 Aug 2025 01:49:43 GMT
+Date: Tue, 19 Aug 2025 03:05:42 GMT
 Content-Length: 349
 
 {
   "permisos": "USUARIO_ALTA, USUARIO_BAJA, USUARIO_LISTAR, USUARIO_MODIFICAR",
   "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzE3ODMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.5G7lvB5G_sw2yktbhFcNjbJ8ZitpPFjiZmK6HrD9wRc"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzYzNDIsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.1pXNLDJSOLWEzJoqQ_aPWa1e0mppyAxoVoVInUvytP8"
 }
 #+end_src
-
 
 *** Alta permiso
 #+begin_src verb
   post /p/usuario/6/rol
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "rol_id": 2
@@ -87,7 +89,7 @@ Content-Length: 36
 #+begin_src verb
   delete /p/usuario/6/rol
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "rol_id": 2
@@ -109,7 +111,7 @@ Content-Length: 27
 *** Buscar
 #+begin_src verb 
   get /p/usuario/6
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzE3ODMsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.5G7lvB5G_sw2yktbhFcNjbJ8ZitpPFjiZmK6HrD9wRc
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 #+end_src
 
 #+RESULTS:
@@ -138,14 +140,14 @@ Content-Length: 255
 *** Paginado
 #+begin_src verb 
   get /p/usuario
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NzEwMTAsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.IbulroaLN7y3TbkBSu3rC2txQaS0sGcV0Uim3w8o60Y
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Tue, 19 Aug 2025 01:37:41 GMT
+Date: Tue, 19 Aug 2025 02:17:26 GMT
 Content-Length: 938
 
 {
@@ -201,18 +203,19 @@ Content-Length: 938
 
 Paginado args
 #+begin_src verb 
-  get /p/usuario?diferencia=0&limite=10
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzU1NDEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.ZtFxbDhLpSCOoqTGjw6RLKmwM0n2F74dpey8FLoItzY
+  get /p/usuario?diferencia=0&limite=2
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}  
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
-  HTTP/1.1 200 OK
-  Content-Type: application/json
-  Date: Sun, 17 Aug 2025 23:42:41 GMT
-  Content-Length: 683
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 19 Aug 2025 02:17:36 GMT
+Content-Length: 518
 
-  [
+{
+  "datos": [
     {
       "id": 1,
       "usuario": "fran",
@@ -234,27 +237,17 @@ Paginado args
       "direccion": null,
       "rol": "EMPLEADO",
       "permisos": "USUARIO_LISTAR"
-    },
-    {
-      "id": 3,
-      "usuario": "fran3",
-      "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
-      "email": "fran3@gmail.com",
-      "nombre": null,
-      "telefono": null,
-      "direccion": null,
-      "rol": "USUARIO",
-      "permisos": null
     }
-  ]
+  ],
+  "mensaje": "Peticion exitosa"
+}
 #+end_src
 
 *** Modificar
 #+begin_src verb 
   post /p/usuario/4
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU0NzU1NDEsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.ZtFxbDhLpSCOoqTGjw6RLKmwM0n2F74dpey8FLoItzY
-
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "usuario": "testeowachin",
@@ -279,7 +272,7 @@ Paginado args
 *** Baja
 #+begin_src verb
   delete /p/usuario/5
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjQ1MzksInBlcm1pc29zIjoiUGVybWlzbyBkZXNkZSBsYSBhcGksIFVTVUFSSU9fQUxUQSwgVVNVQVJJT19CQUpBLCBVU1VBUklPX0xJU1RBUiwgVVNVQVJJT19NT0RJRklDQVIiLCJyb2wiOiJBRE1JTiIsInVzdWFyaW8iOiJmcmFuIn0.I77Vj6ZTNNGzlutYPrmomaUhzMoKHDG5LfUgmhzi06w
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 #+end_src
 
 #+RESULTS:
@@ -299,7 +292,7 @@ Content-Length: 27
 #+begin_src verb
   post /p/permiso
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NDg5NTksInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.1TWxUvba7bFsGrNLx-uWQcdAH9u-Akzlyye40I5-PZw
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "nombre": "Permiso desde la api"
@@ -321,7 +314,7 @@ Content-Length: 27
 #+begin_src verb
   post /p/rol
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NDk4ODgsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.VS07Z4YZHqvnN4m3hb5DfuJFD1bj1U1sSVbVUk0CAGg
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "nombre": "Rol desde la api"
@@ -337,11 +330,30 @@ Content-Length: 27
 
   4
 #+end_src
+*** Buscar
+#+begin_src verb
+  get /p/rol/1
+  Content-Type: application/json; charset=utf-8
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+Date: Tue, 19 Aug 2025 03:06:21 GMT
+Content-Length: 42
+
+{
+  "mensaje": "Error interno en el sistema"
+}
+#+end_src
+
 *** Alta permiso
 #+begin_src verb
   post /p/rol/1
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "permiso_id": 5
@@ -363,7 +375,7 @@ Content-Length: 36
 #+begin_src verb
   delete /p/rol/1
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU1NjY0NjYsInBlcm1pc29zIjoiVVNVQVJJT19BTFRBLCBVU1VBUklPX0JBSkEsIFVTVUFSSU9fTElTVEFSLCBVU1VBUklPX01PRElGSUNBUiIsInJvbCI6IkFETUlOIiwidXN1YXJpbyI6ImZyYW4ifQ.Mcxu-5PRCQ_OQD847b_MMmkadgTRLehRULOC27EuFt4
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
   "permiso_id": 5

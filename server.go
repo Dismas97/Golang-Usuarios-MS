@@ -75,7 +75,9 @@ func main() {
 		grupoP.POST("/usuario/:id/rol", controles.AltaUsuarioRol)
 		grupoP.POST("/permiso", controles.AltaRolOPermiso)
 		grupoP.POST("/rol", controles.AltaRolOPermiso)
+		grupoP.GET("/rol", controles.ListarRoles)
 		grupoP.POST("/rol/:id", controles.AltaRolPermiso)
+		grupoP.GET("/rol/:id", controles.BuscarRol)
 		grupoP.DELETE("/rol/:id", controles.BajaRolPermiso)
 		
 		log.Errorf("Server: %v", e.Start(fmt.Sprintf(":%d",config.ServerPort)))

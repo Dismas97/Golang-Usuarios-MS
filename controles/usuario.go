@@ -24,7 +24,7 @@ type Usuario struct {
 		Direccion *string `json:"direccion" form:"direccion"`
 }
 
-type UsuarioRol struct {
+type UsuarioDetallado struct {
 		Id int `json:"id" form:"id"`
 		Usuario string `json:"usuario" form:"usuario"`
 		Contra  string `json:"contra" form:"contra"`
@@ -35,12 +35,20 @@ type UsuarioRol struct {
 		Rol *string `json:"rol" form:"rol"`
 		Permisos * string `json:"permisos" form:"permisos"`
 }
+type RolPermiso struct {
+		Id int `json:"id" form:"id"`
+		Rol string `json:"rol" form:"rol"`
+		Permisos *[]RolOPermiso `json:"permisos" form:"permisos"`
+}
+type RolOPermiso struct {
+		Id int `json:"id" form:"id"`
+		Nombre int `json:"nombre" form:"nombre"`
+}
 
 type LoginRequest struct {
 		Usuario string `json:"usuario"`
 		Contra string `json:"contra"`
 }
-
 
 func chequeoQueryData(fuente map[string]any, campos []string) error {
 		for i := range campos {
@@ -52,12 +60,12 @@ func chequeoQueryData(fuente map[string]any, campos []string) error {
 		return nil
 }
 
-func getUsuario(campo string, valor string) (UsuarioRol, error) {
+func getUsuario(campo string, valor string) (UsuarioDetallado, error) {
 		log.Debugf("getUsuario(%v,%v)", campo, valor)
 		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE "+campo+" = ? GROUP BY u.id"
 		fila := utils.BD.QueryRow(query, valor)
 		
-		var u UsuarioRol
+		var u UsuarioDetallado
 		if err := sqlstruct.ScanStruct(fila, &u); err != nil {
 				log.Error(err)
 				return u,err
@@ -269,7 +277,6 @@ func AltaRolOPermiso(c echo.Context) error {
 						"mensaje":utils.MsjResModExito,
 						"datos":map[string]int64{"id":resid}})
 }
-
 func BuscarUsuario(c echo.Context) error {
 		id := c.Param("id")
 		u, err := getUsuario("u.id",id)
@@ -298,7 +305,7 @@ func ListarUsuarios(c echo.Context) error {
 		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id GROUP BY u.id LIMIT ? OFFSET ?"
 		
 		filas, err := utils.BD.Query(query,limite,diferencia)
-		var u UsuarioRol
+		var u UsuarioDetallado
 		usuarios := [] any {}
 		usuarios, err = sqlstruct.ScanSlice(filas, u)
 		if err != nil {
@@ -310,6 +317,54 @@ func ListarUsuarios(c echo.Context) error {
 				map[string]any{
 						"mensaje":utils.MsjResExito,
 						"datos":usuarios})
+}
+
+func BuscarRol(c echo.Context) error {		
+		id := c.Param("id")		
+		log.Debug("BuscarRol")
+		query := "SELECT r.id, r.nombre AS rol, JSON_ARRAYAGG(JSON_OBJECT('id', p.id,'nombre', p.nombre)) AS permisos FROM Rol r LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE r.id = ?"
+		fila := utils.BD.QueryRow(query, id)
+
+		var rol RolPermiso
+		
+		if err := sqlstruct.ScanStruct(fila, &rol); err != nil  {
+				log.Errorf("BuscarRol: %v",err)
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
+		}
+		return c.JSON(http.StatusOK,
+				map[string]any{
+						"mensaje":utils.MsjResExito,
+						"datos":rol})
+}
+
+
+func ListarRoles(c echo.Context) error {
+		limite := c.QueryParam("limite")
+		diferencia := c.QueryParam("diferencia")
+		log.Debugf("ListarRoles: limite %v diferencia %v", limite, diferencia)
+		if limite == "" {
+				limite = "10"
+		}
+		if diferencia == "" {
+				diferencia = "0"
+		}
+		
+		query := "SELECT r.id, r.nombre AS rol, JSON_ARRAYAGG(JSON_OBJECT('id', p.id,'nombre', p.nombre)) AS permisos FROM Rol r LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id GROUP BY r.id LIMIT ? OFFSET ?"
+		
+		filas, err := utils.BD.Query(query,limite,diferencia)
+		var rol RolPermiso
+		roles := [] any {}
+		roles, err = sqlstruct.ScanSlice(filas, rol)
+		if err != nil {
+				log.Error(err)
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
+		}
+		return c.JSON(http.StatusOK,
+				map[string]any{
+						"mensaje":utils.MsjResExito,
+						"datos":roles})
 }
 
 func ModificarUsuario(c echo.Context) error {		
