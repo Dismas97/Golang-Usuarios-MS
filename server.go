@@ -1,18 +1,20 @@
 package main
 
 import (
-		"fmt"
-		"os"
-		"time"
-		"database/sql"
-		"encoding/json"
-		"fran/controles"
-		"fran/utils"
-		_ "github.com/go-sql-driver/mysql"
-		"github.com/labstack/echo-jwt/v4"
-		"github.com/labstack/echo/v4"
-		"github.com/labstack/echo/v4/middleware"
-		log "github.com/sirupsen/logrus"
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"fran/controles"
+	"fran/utils"
+	"io"
+	"os"
+	"time"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type Config struct {
@@ -27,7 +29,17 @@ type Config struct {
 var err error = nil
 
 func main() {
-		log.SetOutput(os.Stdout)
+
+		logRotator := &lumberjack.Logger{
+				Filename:   "logs.log",
+				MaxSize:    10,         //MB
+				MaxBackups: 3,
+				MaxAge:     28,         // Días
+				Compress:   true,
+		}
+		
+		multiWriter := io.MultiWriter(os.Stdout, logRotator)
+		log.SetOutput(multiWriter)
 		log.SetLevel(log.DebugLevel)
 		
 		file, _ := os.Open("config.json")
@@ -56,9 +68,7 @@ func main() {
 		}
 		
 		e := echo.New()
-		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-				Format: "${time_rfc3339} ${method} ${uri} ${status} ${error}\n",
-		}))
+		e.Use(middleware.Logger())
 		
 		e.POST("/login", controles.Login)
 		e.POST("/registrar", controles.Registrar)
