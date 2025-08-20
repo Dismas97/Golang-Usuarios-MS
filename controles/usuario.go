@@ -225,11 +225,18 @@ func BuscarUsuario(c echo.Context) error {
 		}
 		var aux []RolOPermiso
 		err = json.Unmarshal([]byte(*u.Permisos),&aux)
+		
+		if aux[0].Id == 0 && aux[0].Nombre == "" {
+				aux = nil
+		}
 		res := UsuarioDetalladoRes{
 				Id: u.Id,
 				Usuario: u.Usuario,
 				Contra: u.Contra,
 				Direccion: u.Direccion,
+				Nombre: u.Nombre,
+				Telefono: u.Telefono,
+				Email: u.Email,
 				Rol: u.Rol,
 				Permisos: aux,
         }
@@ -262,8 +269,7 @@ func ListarUsuarios(c echo.Context) error {
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
 		}
 
-		var res []UsuarioDetalladoRes
-		
+		var res []UsuarioDetalladoRes		
 		var auxPermisos []RolOPermiso
 		for i := range usuarios {
 				auxPuntero := usuarios[i].(*UsuarioDetallado)
@@ -275,11 +281,17 @@ func ListarUsuarios(c echo.Context) error {
 						return c.JSON(http.StatusInternalServerError, 
 								map[string]string{"msj": utils.MsjResErrInterno})
 				}
+				if auxPermisos[0].Id == 0 && auxPermisos[0].Nombre == "" {
+						auxPermisos = nil
+				}
 				resindex := UsuarioDetalladoRes{
 						Id: auxUsuario.Id,
 						Usuario: auxUsuario.Usuario,
 						Contra: auxUsuario.Contra,
 						Direccion: auxUsuario.Direccion,
+						Nombre: auxUsuario.Nombre,
+						Telefono: auxUsuario.Telefono,
+						Email: auxUsuario.Email,
 						Rol: auxUsuario.Rol,
 						Permisos: auxPermisos,
 				}
@@ -292,7 +304,7 @@ func ListarUsuarios(c echo.Context) error {
 						"datos":res})
 }
 
-func ModificarUsuario(c echo.Context) error {		
+func ModificarUsuario(c echo.Context) error {
 		var u Usuario
 		log.Debug("ModificarUsuario")
 		id := c.Param("id")

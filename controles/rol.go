@@ -47,6 +47,10 @@ func BuscarRol(c echo.Context) error {
 				return c.JSON(http.StatusInternalServerError, 
 						map[string]string{"msj": utils.MsjResErrInterno})
 		}
+		
+		if auxiliar[0].Id == 0 && auxiliar[0].Nombre == "" {
+				auxiliar = nil
+		}
 		res := RolRes{
 				Id: rol.Id,
 				Rol: rol.Rol,
@@ -93,6 +97,10 @@ func ListarRoles(c echo.Context) error {
 						log.Errorf("BuscarRol: %v",err)
 						return c.JSON(http.StatusInternalServerError, 
 								map[string]string{"msj": utils.MsjResErrInterno})
+				}
+				
+				if auxPermisos[0].Id == 0 && auxPermisos[0].Nombre == "" {
+						auxPermisos = nil
 				}
 				resindex := RolRes{
 						Id: auxRol.Id,

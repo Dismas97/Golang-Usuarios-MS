@@ -16,10 +16,10 @@ Crea un nuevo usuario en la bd.
   Content-Type: application/json; charset=utf-8
   
   {
-  "usuario": "TestUsuarioValido",
-  "email": "unMailValido@gmail.com",
-  "nombre": "UsuarioValido",
-  "contra": "12345678"
+  "usuario": "Usuarioasd",
+  "email": "21edasd@gmail.com",
+  "nombre": "asd123123da",
+  "contra": "dsaasdasd"
   }
 #+end_src
 
@@ -27,7 +27,7 @@ Crea un nuevo usuario en la bd.
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Tue, 19 Aug 2025 23:05:13 GMT
+Date: Wed, 20 Aug 2025 02:12:21 GMT
 Content-Length: 27
 
 {
@@ -53,7 +53,7 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 01:53:36 GMT
+Date: Wed, 20 Aug 2025 02:37:17 GMT
 Content-Length: 579
 
 {
@@ -76,7 +76,7 @@ Content-Length: 579
     }
   ],
   "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU2NTg0MTYsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInVzdWFyaW8iOiJmcmFuIn0.xqDiobOEh_Y37p5GJDzoKZ_Htpf5rE-G5l6PHzwWB1s"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU2NjEwMzcsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInVzdWFyaW8iOiJmcmFuIn0.fNqXHai5zcgJmpdgfZrn9k5ep7LectilWy9GCgw_IFM"
 }
 #+end_src
 
@@ -127,7 +127,7 @@ Content-Length: 27
 
 *** Buscar
 #+begin_src verb 
-  get /p/usuario/1
+  get /p/usuario/4
   Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 #+end_src
 
@@ -135,35 +135,23 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 01:44:06 GMT
-Content-Length: 361
+Date: Wed, 20 Aug 2025 02:34:52 GMT
+Content-Length: 306
 
 {
   "datos": {
-    "id": 1,
-    "usuario": "fran",
-    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
-    "email": "",
-    "nombre": null,
-    "telefono": null,
-    "direccion": null,
-    "rol": "ADMIN",
+    "id": 4,
+    "usuario": "Usuarioasd",
+    "contra": "$2a$15$PZQ1F34N0Xg1n4NHyO4YPOByllAt1aBdUx4xTtZBn9AAx4KdA94rG",
+    "email": "testeomanwsadawseito@test.com",
+    "nombre": "uwuwuwu",
+    "telefono": "266503231",
+    "direccion": "Martin de Loyola 1524",
+    "rol": null,
     "permisos": [
       {
-        "id": 1,
-        "nombre": "USUARIO_ALTA"
-      },
-      {
-        "id": 2,
-        "nombre": "USUARIO_BAJA"
-      },
-      {
-        "id": 3,
-        "nombre": "USUARIO_LISTAR"
-      },
-      {
-        "id": 4,
-        "nombre": "USUARIO_MODIFICAR"
+        "id": 0,
+        "nombre": ""
       }
     ]
   },
@@ -181,8 +169,8 @@ Content-Length: 361
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 01:53:40 GMT
-Content-Length: 1001
+Date: Wed, 20 Aug 2025 02:34:58 GMT
+Content-Length: 1068
 
 {
   "datos": [
@@ -190,7 +178,7 @@ Content-Length: 1001
       "id": 1,
       "usuario": "fran",
       "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
-      "email": "",
+      "email": "fran1@gmail.com",
       "nombre": null,
       "telefono": null,
       "direccion": null,
@@ -218,7 +206,7 @@ Content-Length: 1001
       "id": 2,
       "usuario": "fran2",
       "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
-      "email": "",
+      "email": "fran2@gmail.com",
       "nombre": null,
       "telefono": null,
       "direccion": null,
@@ -234,33 +222,23 @@ Content-Length: 1001
       "id": 3,
       "usuario": "fran3",
       "contra": "$2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u",
-      "email": "",
+      "email": "fran3@gmail.com",
       "nombre": null,
       "telefono": null,
       "direccion": null,
       "rol": "USUARIO",
-      "permisos": [
-        {
-          "id": 0,
-          "nombre": ""
-        }
-      ]
+      "permisos": null
     },
     {
-      "id": 5,
-      "usuario": "testeowachin",
-      "contra": "$2a$15$ymTgqjsNh4xzK5dgjPMHeuiqT6bfltjmt7N90sKv.rndls2JVRUz.",
-      "email": "",
-      "nombre": null,
-      "telefono": null,
-      "direccion": null,
+      "id": 4,
+      "usuario": "Usuarioasd",
+      "contra": "$2a$15$PZQ1F34N0Xg1n4NHyO4YPOByllAt1aBdUx4xTtZBn9AAx4KdA94rG",
+      "email": "testeomanwsadawseito@test.com",
+      "nombre": "uwuwuwu",
+      "telefono": "266503231",
+      "direccion": "Martin de Loyola 1524",
       "rol": null,
-      "permisos": [
-        {
-          "id": 0,
-          "nombre": ""
-        }
-      ]
+      "permisos": null
     }
   ],
   "mensaje": "Peticion exitosa"
@@ -311,27 +289,29 @@ Content-Length: 518
 
 *** Modificar
 #+begin_src verb 
-  put /p/usuario/5
+  put /p/usuario/4
   Content-Type: application/json; charset=utf-8
   Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 
   {
-  "usuario": "testeowachin",
-  "email": "testeomanito@test.com",
-  "nombre": "eaeaea",
-  "contra": "123"
+  "usuario": "Usuarioasd",
+  "email": "testeomanwsadawseito@test.com",
+  "nombre":"uwuwuwu",
+  "telefono":"266503231",
+  "direccion":"Martin de Loyola 1524",
+  "contra": "121231233"
   }
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 400 Bad Request
+HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Tue, 19 Aug 2025 23:07:47 GMT
+Date: Wed, 20 Aug 2025 02:16:07 GMT
 Content-Length: 36
 
 {
-  "mensaje": "Formulario incorrecto"
+  "mensaje": "Modificación exitosa"
 }
 #+end_src
 
@@ -408,7 +388,7 @@ Content-Length: 53
 #+end_src
 *** Buscar
 #+begin_src verb
-  get /p/rol
+  get /p/rol/3
   Content-Type: application/json; charset=utf-8
   Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
 #+end_src
@@ -417,64 +397,15 @@ Content-Length: 53
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 01:42:32 GMT
-Content-Length: 431
+Date: Wed, 20 Aug 2025 02:37:36 GMT
+Content-Length: 80
 
 {
-  "datos": [
-    {
-      "id": 1,
-      "rol": "ADMIN",
-      "permisos": [
-        {
-          "id": 1,
-          "nombre": "USUARIO_ALTA"
-        },
-        {
-          "id": 2,
-          "nombre": "USUARIO_BAJA"
-        },
-        {
-          "id": 3,
-          "nombre": "USUARIO_LISTAR"
-        },
-        {
-          "id": 4,
-          "nombre": "USUARIO_MODIFICAR"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "rol": "EMPLEADO",
-      "permisos": [
-        {
-          "id": 3,
-          "nombre": "USUARIO_LISTAR"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "rol": "USUARIO",
-      "permisos": [
-        {
-          "id": 0,
-          "nombre": ""
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "rol": "ROL_DESDE_API",
-      "permisos": [
-        {
-          "id": 5,
-          "nombre": "PERMISO_DESDE_API"
-        }
-      ]
-    }
-  ],
+  "datos": {
+    "id": 3,
+    "rol": "USUARIO",
+    "permisos": null
+  },
   "mensaje": "Peticion exitosa"
 }
 #+end_src

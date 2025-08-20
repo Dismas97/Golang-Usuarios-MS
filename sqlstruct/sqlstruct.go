@@ -102,10 +102,12 @@ func ScanSlice(rows *sql.Rows, tipo any) (retorno []any, err error) {
 		return retorno, nil
 }
 
-
 func Modificar(u any, id string) error{
 		log.Debugf("modificar: %v", u)
 		tabla, campos, valores, err := StructAstring(u)
+		log.Debugf("tabla: %v", tabla)
+		log.Debugf("campos: %v", campos)
+		log.Debugf("valores: %v", valores)
 		if err != nil {
 				log.Error(err)
 				return err
@@ -127,20 +129,23 @@ func Modificar(u any, id string) error{
 		return nil
 }
 
-func Baja(tabla string, id string) error {		
-		log.Debugf("alta: %s", id)		
+func Baja(tabla string, id string) error {
+		log.Debugf("alta: %s", id)
 		query := fmt.Sprintf("DELETE FROM %s WHERE id = ?", tabla)
 		_, err = utils.BD.Exec(query, id)
 		if(err != nil){
 				log.Error(err)
 				return err
 		}
-		return nil		
+		return nil
 }
 
-func Alta(u any) (id int64, err error){		
+func Alta(u any) (id int64, err error){
 		log.Debugf("alta: %v", u)
 		tabla, campos, valores, err := StructAstring(u)
+		log.Debugf("tabla: %v", tabla)
+		log.Debugf("campos: %v", campos)
+		log.Debugf("valores: %v", valores)
 		if err != nil {
 				log.Error(err)
 				return -1, err

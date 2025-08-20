@@ -50,3 +50,7 @@ CLOSED: [2025-08-18 lun 22:51]
 CLOSED: [2025-08-17 dom 20:43]
 ** DONE Modificar usuarios
 CLOSED: [2025-08-17 dom 20:43]
+** Revisar controles en usuarios
+*** Campos Alta
+*** Campos Modificar
+Actualmente modifica mal
