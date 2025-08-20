@@ -1,16 +1,17 @@
 package controles
 
 import (
-		"net/http"
+		"encoding/json"
+		"errors"
 		"fran/sqlstruct"
 		"fran/utils"
-		"github.com/labstack/echo/v4"
-		"github.com/golang-jwt/jwt/v5"
-		"time"		
-		"errors"
-		"golang.org/x/crypto/bcrypt"
-		log "github.com/sirupsen/logrus"
+		"net/http"
+		"time"
 		_ "github.com/go-sql-driver/mysql"
+		"github.com/golang-jwt/jwt/v5"
+		"github.com/labstack/echo/v4"
+		log "github.com/sirupsen/logrus"
+		"golang.org/x/crypto/bcrypt"
 )
 
 var err error = nil
@@ -35,14 +36,17 @@ type UsuarioDetallado struct {
 		Rol *string `json:"rol" form:"rol"`
 		Permisos * string `json:"permisos" form:"permisos"`
 }
-type RolPermiso struct {
+
+type UsuarioDetalladoRes struct {
 		Id int `json:"id" form:"id"`
-		Rol string `json:"rol" form:"rol"`
-		Permisos *[]RolOPermiso `json:"permisos" form:"permisos"`
-}
-type RolOPermiso struct {
-		Id int `json:"id" form:"id"`
-		Nombre int `json:"nombre" form:"nombre"`
+		Usuario string `json:"usuario" form:"usuario"`
+		Contra  string `json:"contra" form:"contra"`
+		Email string `json:"email" form:"email"`
+		Nombre *string `json:"nombre" form:"nombre"`
+		Telefono *string `json:"telefono" form:"telefono"`
+		Direccion *string `json:"direccion" form:"direccion"`
+		Rol *string `json:"rol" form:"rol"`
+		Permisos []RolOPermiso `json:"permisos" form:"permisos"`
 }
 
 type LoginRequest struct {
@@ -62,7 +66,7 @@ func chequeoQueryData(fuente map[string]any, campos []string) error {
 
 func getUsuario(campo string, valor string) (UsuarioDetallado, error) {
 		log.Debugf("getUsuario(%v,%v)", campo, valor)
-		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE "+campo+" = ? GROUP BY u.id"
+		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, JSON_ARRAYAGG(JSON_OBJECT('id', p.id,'nombre', p.nombre)) AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE "+campo+" = ? GROUP BY u.id"
 		fila := utils.BD.QueryRow(query, valor)
 		
 		var u UsuarioDetallado
@@ -126,7 +130,7 @@ func Registrar(c echo.Context) error {
 		}
 		
 		u.Contra, err = encriptar(u.Contra)
-		if err == nil {		
+		if err == nil {
 				if _,err = sqlstruct.Alta(u); err != nil{
 						log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 						return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
@@ -162,13 +166,15 @@ func Login(c echo.Context) error{
 		
         token, err := generarJWT(usuario.Usuario, *usuario.Rol, *usuario.Permisos)
 		
+		var aux []RolOPermiso
+		err = json.Unmarshal([]byte(*usuario.Permisos),&aux)
 		if err != nil {				
 				log.Error(err)
 				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
         }
 		log.Debugf("ApiRes: %v", http.StatusOK)
-        return c.JSON(http.StatusOK, map[string]string{"token": token, "rol":*usuario.Rol, "permisos":*usuario.Permisos})
+        return c.JSON(http.StatusOK, map[string]any{"token": token, "rol":*usuario.Rol, "permisos": aux})
 }
 
 func AltaUsuarioRol(c echo.Context) error {
@@ -187,8 +193,7 @@ func AltaUsuarioRol(c echo.Context) error {
 				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
 		}		
-		return c.JSON(http.StatusOK, map[string]string{"mensaje":utils.MsjResModExito})
-		
+		return c.JSON(http.StatusOK, map[string]string{"mensaje":utils.MsjResModExito})		
 }
 
 func BajaUsuarioRol(c echo.Context) error {
@@ -207,76 +212,9 @@ func BajaUsuarioRol(c echo.Context) error {
 				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
 		}		
-		return c.JSON(http.StatusOK, map[string]string{"mensaje":utils.MsjResBajaExito})
-		
+		return c.JSON(http.StatusOK, map[string]string{"mensaje":utils.MsjResBajaExito})		
 }
 
-func BajaRolPermiso(c echo.Context) error {
-		var aux map[string]any
-		id := c.Param("id")
-		c.Bind(&aux)
-		if err = chequeoQueryData(aux,  []string{"permiso_id"}); err != nil{				
-				log.Debugf("%s\nApiRes: %v", err, http.StatusBadRequest)
-				return c.JSON(http.StatusBadRequest, map[string]string{"mensaje":utils.MsjResErrFormIncorrecto})
-		}
-
-		query := "DELETE FROM RolPermiso WHERE rol_id = ? AND permiso_id = ?"
-		_, err := utils.BD.Exec(query, id, aux["permiso_id"])
-		if(err != nil){
-				log.Errorf("EliminarRolPermiso: %v",err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
-		}		
-		return c.JSON(http.StatusOK, map[string]string{"mensaje":utils.MsjResBajaExito})
-}
-
-
-func AltaRolPermiso(c echo.Context) error {
-		var aux map[string]any
-		id := c.Param("id")
-		c.Bind(&aux)
-		if err = chequeoQueryData(aux,  []string{"permiso_id"}); err != nil{				
-				log.Debugf("%s\nApiRes: %v", err, http.StatusBadRequest)
-				return c.JSON(http.StatusBadRequest, map[string]string{"mensaje":utils.MsjResErrFormIncorrecto})
-		}
-
-		query := "INSERT INTO RolPermiso (rol_id,permiso_id) VALUES (?, ?)"
-		_, err := utils.BD.Exec(query, id, aux["permiso_id"])
-		if(err != nil){
-				log.Errorf("AltaRolPermiso: %v",err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
-		}		
-		return c.JSON(http.StatusOK, map[string]string{"mensaje":utils.MsjResModExito})
-}
-
-func AltaRolOPermiso(c echo.Context) error {
-		tabla := utils.IndiceMayuscula(c.Path()[3:],0)
-		
-		var aux map[string]string
-		c.Bind(&aux)
-		if  aux["nombre"] == ""  {		
-				log.Debugf("ApiRes: %v", http.StatusBadRequest)
-				return c.JSON(http.StatusBadRequest, map[string]string{"mensaje":utils.MsjResErrFormIncorrecto})
-		}
-		query := "INSERT INTO "+tabla+" (nombre) VALUES (?)"
-		res, err := utils.BD.Exec(query, aux["nombre"])
-		if(err != nil){
-				log.Errorf("AltaRolOPermiso: %v",err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
-		}		
-		resid, err :=  res.LastInsertId()
-		if(err != nil){
-				log.Errorf("AltaRolOPermiso: %v",err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
-		}
-		return c.JSON(http.StatusOK,
-				map[string]any{
-						"mensaje":utils.MsjResModExito,
-						"datos":map[string]int64{"id":resid}})
-}
 func BuscarUsuario(c echo.Context) error {
 		id := c.Param("id")
 		u, err := getUsuario("u.id",id)
@@ -285,10 +223,20 @@ func BuscarUsuario(c echo.Context) error {
 				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
 		}
+		var aux []RolOPermiso
+		err = json.Unmarshal([]byte(*u.Permisos),&aux)
+		res := UsuarioDetalladoRes{
+				Id: u.Id,
+				Usuario: u.Usuario,
+				Contra: u.Contra,
+				Direccion: u.Direccion,
+				Rol: u.Rol,
+				Permisos: aux,
+        }
 		return c.JSON(http.StatusOK,
 				map[string]any{
 						"mensaje":utils.MsjResExito,
-						"datos":u})
+						"datos":res})
 }
 
 func ListarUsuarios(c echo.Context) error {
@@ -302,7 +250,7 @@ func ListarUsuarios(c echo.Context) error {
 				diferencia = "0"
 		}
 		
-		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id GROUP BY u.id LIMIT ? OFFSET ?"
+		query := "SELECT u.id, u.usuario, u.contra, u.email, u.nombre, u.telefono, u.direccion, r.nombre AS rol, JSON_ARRAYAGG(JSON_OBJECT('id', p.id,'nombre', p.nombre)) AS permisos FROM Usuario u LEFT JOIN UsuarioRol ur ON u.id = ur.usuario_id LEFT JOIN Rol r ON ur.rol_id = r.id LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id GROUP BY u.id LIMIT ? OFFSET ?"
 		
 		filas, err := utils.BD.Query(query,limite,diferencia)
 		var u UsuarioDetallado
@@ -313,58 +261,35 @@ func ListarUsuarios(c echo.Context) error {
 				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
 				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
 		}
+
+		var res []UsuarioDetalladoRes
+		
+		var auxPermisos []RolOPermiso
+		for i := range usuarios {
+				auxPuntero := usuarios[i].(*UsuarioDetallado)
+				auxUsuario := *auxPuntero
+				auxPermisos = nil
+				err := json.Unmarshal([]byte(*auxUsuario.Permisos), &auxPermisos)
+				if err != nil {
+						log.Errorf("ListarUsuarios: %v",err)
+						return c.JSON(http.StatusInternalServerError, 
+								map[string]string{"msj": utils.MsjResErrInterno})
+				}
+				resindex := UsuarioDetalladoRes{
+						Id: auxUsuario.Id,
+						Usuario: auxUsuario.Usuario,
+						Contra: auxUsuario.Contra,
+						Direccion: auxUsuario.Direccion,
+						Rol: auxUsuario.Rol,
+						Permisos: auxPermisos,
+				}
+				res = append(res,resindex)
+		}
+		
 		return c.JSON(http.StatusOK,
 				map[string]any{
 						"mensaje":utils.MsjResExito,
-						"datos":usuarios})
-}
-
-func BuscarRol(c echo.Context) error {		
-		id := c.Param("id")		
-		log.Debug("BuscarRol")
-		query := "SELECT r.id, r.nombre AS rol, JSON_ARRAYAGG(JSON_OBJECT('id', p.id,'nombre', p.nombre)) AS permisos FROM Rol r LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id WHERE r.id = ?"
-		fila := utils.BD.QueryRow(query, id)
-
-		var rol RolPermiso
-		
-		if err := sqlstruct.ScanStruct(fila, &rol); err != nil  {
-				log.Errorf("BuscarRol: %v",err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
-		}
-		return c.JSON(http.StatusOK,
-				map[string]any{
-						"mensaje":utils.MsjResExito,
-						"datos":rol})
-}
-
-
-func ListarRoles(c echo.Context) error {
-		limite := c.QueryParam("limite")
-		diferencia := c.QueryParam("diferencia")
-		log.Debugf("ListarRoles: limite %v diferencia %v", limite, diferencia)
-		if limite == "" {
-				limite = "10"
-		}
-		if diferencia == "" {
-				diferencia = "0"
-		}
-		
-		query := "SELECT r.id, r.nombre AS rol, JSON_ARRAYAGG(JSON_OBJECT('id', p.id,'nombre', p.nombre)) AS permisos FROM Rol r LEFT JOIN RolPermiso rp ON r.id = rp.rol_id LEFT JOIN Permiso p ON rp.permiso_id = p.id GROUP BY r.id LIMIT ? OFFSET ?"
-		
-		filas, err := utils.BD.Query(query,limite,diferencia)
-		var rol RolPermiso
-		roles := [] any {}
-		roles, err = sqlstruct.ScanSlice(filas, rol)
-		if err != nil {
-				log.Error(err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
-		}
-		return c.JSON(http.StatusOK,
-				map[string]any{
-						"mensaje":utils.MsjResExito,
-						"datos":roles})
+						"datos":res})
 }
 
 func ModificarUsuario(c echo.Context) error {		

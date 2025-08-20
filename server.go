@@ -67,6 +67,7 @@ func main() {
 		grupoP := e.Group("/p")
 		grupoP.Use(echojwt.JWT(utils.JWTSecret))
 		grupoP.Use(controles.FiltroSuperAdmin)
+		grupoP.GET("", controles.FiltroCheck)
 		grupoP.GET("/usuario", controles.ListarUsuarios)
 		grupoP.GET("/usuario/:id", controles.BuscarUsuario)
 		grupoP.DELETE("/usuario/:id", controles.BajaUsuario)

@@ -27,11 +27,16 @@ Este proyecto incluye el servidor y la bd correspondiente
 #+end_src
 
 * TODO Pendiente
-** TODO Alta Rol
-** TODO Alta Permiso
-** TODO Baja Rol
-** TODO Baja Permiso
-** TODO Listar Rol
+** DONE Alta Rol
+CLOSED: [2025-08-19 mar 22:16]
+** DONE Alta Permiso
+CLOSED: [2025-08-19 mar 22:16]
+** DONE Baja Rol
+CLOSED: [2025-08-19 mar 22:16]
+** DONE Baja Permiso
+CLOSED: [2025-08-19 mar 22:16]
+** DONE Listar Rol
+CLOSED: [2025-08-19 mar 22:16]
 ** TODO Listar Permiso
 ** DONE Asignar Permiso a Rol
 CLOSED: [2025-08-18 lun 22:52]
