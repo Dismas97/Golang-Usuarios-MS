@@ -53,10 +53,11 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 02:47:33 GMT
-Content-Length: 579
+Date: Fri, 22 Aug 2025 04:21:12 GMT
+Content-Length: 1267
 
 {
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MzczNzIsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoiZnJhbiJ9.qZG3BTrXZCkR9d7z1rMhJQALo0zytOsxMsUb1wla8qc",
   "permisos": [
     {
       "id": 1,
@@ -75,8 +76,8 @@ Content-Length: 579
       "nombre": "USUARIO_MODIFICAR"
     }
   ],
-  "rol": "ADMIN",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU2NjE2NTMsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInVzdWFyaW8iOiJmcmFuIn0.R7HgXiycQfiTsHIhXeOE93srf5Px5Ti3-nVrxNUAjyQ"
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY0NDEyNzIsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6eyJpZCI6MSwidXN1YXJpbyI6ImZyYW4iLCJjb250cmEiOiIkMmEkMTAkR3d1TFhJbTJwRkJxNUtPVWMyN1ZqT3FpTkF2LnNRM3JqOFlnd29vVmNGN3Z4R2dldmlFcjIiLCJlbWFpbCI6ImZyYW4xQGdtYWlsLmNvbSIsIm5vbWJyZSI6bnVsbCwidGVsZWZvbm8iOm51bGwsImRpcmVjY2lvbiI6bnVsbCwicm9sIjoiQURNSU4iLCJwZXJtaXNvcyI6Ilt7XCJpZFwiOiAxLCBcIm5vbWJyZVwiOiBcIlVTVUFSSU9fQUxUQVwifSx7XCJpZFwiOiAyLCBcIm5vbWJyZVwiOiBcIlVTVUFSSU9fQkFKQVwifSx7XCJpZFwiOiAzLCBcIm5vbWJyZVwiOiBcIlVTVUFSSU9fTElTVEFSXCJ9LHtcImlkXCI6IDQsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19NT0RJRklDQVJcIn1dIn19.iAkPjCViTGEtMGLKCm0ka8uYBqUAC8UJhL43r8DMAPA",
+  "rol": "ADMIN"
 }
 #+end_src
 
@@ -84,7 +85,7 @@ Content-Length: 579
 #+begin_src verb
   post /p/usuario/8/rol
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "rol_id": 1
@@ -106,7 +107,7 @@ Content-Length: 36
 #+begin_src verb
   delete /p/usuario/6/rol
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "rol_id": 2
@@ -127,31 +128,43 @@ Content-Length: 27
 
 *** Buscar
 #+begin_src verb 
-  get /p/usuario/4
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  get /p/usuario/1
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 02:34:52 GMT
-Content-Length: 306
+Date: Fri, 22 Aug 2025 04:22:03 GMT
+Content-Length: 376
 
 {
   "datos": {
-    "id": 4,
-    "usuario": "Usuarioasd",
-    "contra": "$2a$15$PZQ1F34N0Xg1n4NHyO4YPOByllAt1aBdUx4xTtZBn9AAx4KdA94rG",
-    "email": "testeomanwsadawseito@test.com",
-    "nombre": "uwuwuwu",
-    "telefono": "266503231",
-    "direccion": "Martin de Loyola 1524",
-    "rol": null,
+    "id": 1,
+    "usuario": "fran",
+    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
+    "email": "fran1@gmail.com",
+    "nombre": null,
+    "telefono": null,
+    "direccion": null,
+    "rol": "ADMIN",
     "permisos": [
       {
-        "id": 0,
-        "nombre": ""
+        "id": 1,
+        "nombre": "USUARIO_ALTA"
+      },
+      {
+        "id": 2,
+        "nombre": "USUARIO_BAJA"
+      },
+      {
+        "id": 3,
+        "nombre": "USUARIO_LISTAR"
+      },
+      {
+        "id": 4,
+        "nombre": "USUARIO_MODIFICAR"
       }
     ]
   },
@@ -162,15 +175,15 @@ Content-Length: 306
 *** Paginado
 #+begin_src verb
   get /p/usuario
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 #+end_src
 
 #+RESULTS:
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Wed, 20 Aug 2025 02:34:58 GMT
-Content-Length: 1068
+Date: Fri, 22 Aug 2025 03:15:43 GMT
+Content-Length: 819
 
 {
   "datos": [
@@ -228,17 +241,6 @@ Content-Length: 1068
       "direccion": null,
       "rol": "USUARIO",
       "permisos": null
-    },
-    {
-      "id": 4,
-      "usuario": "Usuarioasd",
-      "contra": "$2a$15$PZQ1F34N0Xg1n4NHyO4YPOByllAt1aBdUx4xTtZBn9AAx4KdA94rG",
-      "email": "testeomanwsadawseito@test.com",
-      "nombre": "uwuwuwu",
-      "telefono": "266503231",
-      "direccion": "Martin de Loyola 1524",
-      "rol": null,
-      "permisos": null
     }
   ],
   "mensaje": "Peticion exitosa"
@@ -248,7 +250,7 @@ Content-Length: 1068
 Paginado args
 #+begin_src verb 
   get /p/usuario?diferencia=0&limite=2
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}  
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}  
 #+end_src
 
 #+RESULTS:
@@ -291,7 +293,7 @@ Content-Length: 518
 #+begin_src verb 
   put /p/usuario/4
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "usuario": "Usuarioasd",
@@ -318,7 +320,7 @@ Content-Length: 36
 *** Baja
 #+begin_src verb
   delete /p/usuario/4
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 #+end_src
 
 #+RESULTS:
@@ -338,7 +340,7 @@ Content-Length: 27
 #+begin_src verb
   post /p/permiso
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "nombre": "PERMISO_DESDE_API"
@@ -359,13 +361,69 @@ Content-Length: 53
   "mensaje": "Modificación exitosa"
 }
 #+end_src
+*** Buscar
+#+begin_src verb 
+  get /p/permiso/1
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Fri, 22 Aug 2025 04:22:18 GMT
+Content-Length: 72
+
+{
+  "datos": {
+    "id": 1,
+    "nombre": "USUARIO_ALTA"
+  },
+  "mensaje": "Peticion exitosa"
+}
+#+end_src
+*** Paginado
+#+begin_src verb 
+  get /p/permiso
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Fri, 22 Aug 2025 04:22:27 GMT
+Content-Length: 180
+
+{
+  "datos": [
+    {
+      "id": 1,
+      "nombre": "USUARIO_ALTA"
+    },
+    {
+      "id": 2,
+      "nombre": "USUARIO_BAJA"
+    },
+    {
+      "id": 3,
+      "nombre": "USUARIO_LISTAR"
+    },
+    {
+      "id": 4,
+      "nombre": "USUARIO_MODIFICAR"
+    }
+  ],
+  "mensaje": "Peticion exitosa"
+}
+#+end_src
 
 ** Rol
 *** Alta
 #+begin_src verb
   post /p/rol
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "nombre": "ROL_DESDE_API"
@@ -390,7 +448,7 @@ Content-Length: 53
 #+begin_src verb
   get /p/rol/3
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 #+end_src
 
 #+RESULTS:
@@ -414,7 +472,7 @@ Content-Length: 80
 #+begin_src verb
   post /p/rol/4
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "permiso_id": 5
@@ -436,7 +494,7 @@ Content-Length: 36
 #+begin_src verb
   delete /p/rol/1
   Content-Type: application/json; charset=utf-8
-  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "token")}}
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 
   {
   "permiso_id": 5

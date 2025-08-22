@@ -8,13 +8,5 @@
 
 #+name: my-query
 #+begin_src sql
-  SELECT * FROM Usuario;
+  SELECT * FROM Sesion;
 #+end_src
-
-#+RESULTS: my-query
-| id | creado              | ult_mod             | estado | usuario  | email             | contra                                                       | nombre      | telefono | direccion |
-|----+---------------------+---------------------+--------+----------+-------------------+--------------------------------------------------------------+-------------+----------+-----------|
-|  1 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran     | fran1@gmail.com   | $2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2 | NULL        | NULL     | NULL      |
-|  2 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran2    | fran2@gmail.com   | $2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO | NULL        | NULL     | NULL      |
-|  3 | 2025-08-13 03:07:32 | 2025-08-13 03:07:32 | ACTIVO | fran3    | fran3@gmail.com   | $2a$10$idqTko6.OM4hxae7Omn/3OZqCNSUtsnMWWQ2w7G1GaOcqVVdJVc8u | NULL        | NULL     | NULL      |
-|  4 | 2025-08-13 03:38:29 | 2025-08-13 03:38:29 | ACTIVO | usuario5 | usuario5@test.com | $2a$15$a2.HbI9hOGPCviTNAR3YXOf8KQn8m0AxusYDfffCgqKGYctLXViYG | usuariotest | NULL     | NULL      |

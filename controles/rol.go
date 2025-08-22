@@ -62,6 +62,51 @@ func BuscarRol(c echo.Context) error {
 						"mensaje":utils.MsjResExito,
 						"datos":res})
 }
+func BuscarPermiso(c echo.Context) error {
+		id := c.Param("id")		
+		log.Debug("BuscarPermiso")
+		query := "SELECT * FROM Permiso WHERE id = ?"
+		fila := utils.BD.QueryRow(query, id)
+
+		var res RolOPermiso
+		
+		if err := sqlstruct.ScanStruct(fila, &res); err != nil  {
+				log.Errorf("BuscarPermiso: %v",err)
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno} )
+		}
+		return c.JSON(http.StatusOK,
+				map[string]any{
+						"mensaje":utils.MsjResExito,
+						"datos":res})
+}
+
+func ListarPermisos(c echo.Context) error {
+		limite := c.QueryParam("limite")
+		diferencia := c.QueryParam("diferencia")
+		log.Debugf("ListarPermisos: limite %v diferencia %v", limite, diferencia)
+		if limite == "" {
+				limite = "10"
+		}
+		if diferencia == "" {
+				diferencia = "0"
+		}
+		
+		query := "SELECT * FROM Permiso ORDER BY id LIMIT ? OFFSET ?"
+		
+		filas, err := utils.BD.Query(query,limite,diferencia)
+		var aux RolOPermiso
+		res, err := sqlstruct.ScanSlice(filas, aux)
+		if err != nil {
+				log.Error(err)
+				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
+				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
+		}
+		return c.JSON(http.StatusOK,
+				map[string]any{
+						"mensaje":utils.MsjResExito,
+						"datos":res})
+}
 
 func ListarRoles(c echo.Context) error {
 		limite := c.QueryParam("limite")
@@ -109,8 +154,6 @@ func ListarRoles(c echo.Context) error {
 				}
 				res = append(res,resindex)
 		}
-
-
 		
 		return c.JSON(http.StatusOK,
 				map[string]any{

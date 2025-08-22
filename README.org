@@ -37,7 +37,8 @@ CLOSED: [2025-08-19 mar 22:16]
 CLOSED: [2025-08-19 mar 22:16]
 ** DONE Listar Rol
 CLOSED: [2025-08-19 mar 22:16]
-** TODO Listar Permiso
+** DONE Listar Permisos
+CLOSED: [2025-08-22 vie 01:21]
 ** DONE Asignar Permiso a Rol
 CLOSED: [2025-08-18 lun 22:52]
 ** DONE Quitar Permiso a Rol
@@ -50,7 +51,21 @@ CLOSED: [2025-08-18 lun 22:51]
 CLOSED: [2025-08-17 dom 20:43]
 ** DONE Modificar usuarios
 CLOSED: [2025-08-17 dom 20:43]
-** Revisar controles en usuarios
+** TODO Revisar controles en usuarios
 *** Campos Alta
 *** Campos Modificar
 Actualmente modifica mal
+** TODO Terminar refresh/access tokens
+*** Falta ruta [[file:controles/usuario.go::func RefreshToken(c echo.Context) error {][refresh]]
+*** Falta actualizar sesion a inactiva cuando expira en bd
+*** Agregar ruta logout para invalidar access tokens
+** TODO Agregar aduitoria
+*** Registrar acciones de usuarios en bd
+** TODO Control de numero de peticiones por ip/cliente
+*** Limitar a maximo unas 20? peticiones por minuto?
+** TODO Utilizar campo estado activo/inactivo de la bd
+*** Usuario inactivo no deberia poder loguearse
+*** Agregar estado "baneado"?
+** TODO Refactorizar respuestas
+** TODO Permitir multi-rol y roles-empresa
+** TODO Permisos directos por usuario?

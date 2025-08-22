@@ -29,7 +29,6 @@ type Config struct {
 var err error = nil
 
 func main() {
-
 		logRotator := &lumberjack.Logger{
 				Filename:   "logs.log",
 				MaxSize:    10,         //MB
@@ -41,6 +40,7 @@ func main() {
 		multiWriter := io.MultiWriter(os.Stdout, logRotator)
 		log.SetOutput(multiWriter)
 		log.SetLevel(log.DebugLevel)
+		log.SetReportCaller(true)
 		
 		file, _ := os.Open("config.json")
 		defer file.Close()
@@ -85,6 +85,8 @@ func main() {
 		grupoP.DELETE("/usuario/:id/rol", controles.BajaUsuarioRol)
 		grupoP.POST("/usuario/:id/rol", controles.AltaUsuarioRol)
 		grupoP.POST("/permiso", controles.AltaRolOPermiso)
+		grupoP.GET("/permiso", controles.ListarPermisos)
+		grupoP.GET("/permiso/:id", controles.BuscarPermiso)
 		grupoP.POST("/rol", controles.AltaRolOPermiso)
 		grupoP.GET("/rol", controles.ListarRoles)
 		grupoP.POST("/rol/:id", controles.AltaRolPermiso)
