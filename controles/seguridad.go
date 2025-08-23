@@ -1,18 +1,18 @@
 package controles
 
 import (
-	"encoding/json"
-	"fran/sqlstruct"
-	"fran/utils"
-	"net/http"
-	"strconv"
-	"time"
+		"encoding/json"
+		"fran/sqlstruct"
+		"fran/utils"
+		"net/http"
+		"strconv"
+		"time"
 
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
-	"golang.org/x/crypto/bcrypt"
+		_ "github.com/go-sql-driver/mysql"
+		"github.com/golang-jwt/jwt/v5"
+		"github.com/labstack/echo/v4"
+		log "github.com/sirupsen/logrus"
+		"golang.org/x/crypto/bcrypt"
 )
 
 type Sesion struct {
@@ -25,20 +25,20 @@ type Sesion struct {
 }
 
 func diferenciaFechas(fecha1, fecha2 time.Time) (dias, horas float64) {
-    diferencia := fecha2.Sub(fecha1)
-    horas = diferencia.Hours()
-    dias = horas / 24
-    return dias, horas
+		diferencia := fecha2.Sub(fecha1)
+		horas = diferencia.Hours()
+		dias = horas / 24
+		return dias, horas
 }
 
 func desactivarSesion(usuario_id int, refresh_token string) error {
-    query := "UPDATE Sesion SET activo = false WHERE usuario_id = ? AND refresh_token = ?"
-    _, err := utils.BD.Exec(query, usuario_id, refresh_token)
-    if err != nil {
-        log.Errorf("Error al desactivar sesión: %v", err)
-        return err
-    }
-    return nil
+		query := "UPDATE Sesion SET activo = false WHERE usuario_id = ? AND refresh_token = ?"
+		_, err := utils.BD.Exec(query, usuario_id, refresh_token)
+		if err != nil {
+				log.Errorf("Error al desactivar sesión: %v", err)
+				return err
+		}
+		return nil
 }
 
 func encriptar(contra string) (string, error){
@@ -84,7 +84,7 @@ func generarJWT(usuario UsuarioDetallado) (access string, refresh string, err er
 				Usuario_id : usuario.Id,
 				Refresh_token : refresh,
 				Creado : time.Now(),
-				Expira : time.Now().AddDate(0,0,7),
+				Expira : time.Now().Add(7 * 24 * time.Hour),
 				Activo : true,
 		}
 		sqlstruct.Alta(aux)
@@ -103,6 +103,9 @@ func RefreshToken(c echo.Context) error {
 		sesion, err := getSesion(usuario_id, refresh)
 		
 		if err != nil || !sesion.Activo || time.Now().After(sesion.Expira){
+				if sesion.Activo && time.Now().After(sesion.Expira) {
+						desactivarSesion(sesion.Usuario_id, sesion.Refresh_token)
+				}
 				log.Error(err)
 				log.Debugf("ApiRes: %v", http.StatusNotFound)
 				return c.JSON(http.StatusNotFound, map[string]string{"mensaje":utils.MsjResErrCredInvalidas})

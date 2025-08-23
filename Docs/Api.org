@@ -53,11 +53,11 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Sat, 23 Aug 2025 04:42:23 GMT
+Date: Sat, 23 Aug 2025 05:16:07 GMT
 Content-Length: 764
 
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU5MjUwNDMsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoxfQ.jY61Ss4HctF072DmKcgFNOJdS4NX6I-weLV2G3zD9Gw",
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU5MjcwNjcsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoxfQ.khdE4rBUpHO8unVv7h_wNseFO_BYDDaWb9rA-Pfd0Z0",
   "permisos": [
     {
       "id": 1,
@@ -76,7 +76,7 @@ Content-Length: 764
       "nombre": "USUARIO_MODIFICAR"
     }
   ],
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY1Mjg5NDMsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6MX0.-6gb5Cqf5RAxFpBs9JHLPOpMG4Id4dFgbZGTAp8vzSE",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY1MzA5NjcsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6MX0.bCdJLrSlnLM59_oovLD5pFjPOkr-xlesy7DYnIkbiPs",
   "rol": "ADMIN"
 }
 #+end_src
@@ -89,33 +89,13 @@ Content-Length: 764
 
 #+RESULTS:
 #+begin_src ob-verb-response
-HTTP/1.1 200 OK
+HTTP/1.1 404 Not Found
 Content-Type: application/json
-Date: Sat, 23 Aug 2025 04:42:27 GMT
-Content-Length: 764
+Date: Sat, 23 Aug 2025 05:16:29 GMT
+Content-Length: 37
 
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU5MjUwNDcsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoxfQ.qIXMkMw8X7AIq0LHdS1NDWcdByImuL6ojPq497oXqsg",
-  "permisos": [
-    {
-      "id": 1,
-      "nombre": "USUARIO_ALTA"
-    },
-    {
-      "id": 2,
-      "nombre": "USUARIO_BAJA"
-    },
-    {
-      "id": 3,
-      "nombre": "USUARIO_LISTAR"
-    },
-    {
-      "id": 4,
-      "nombre": "USUARIO_MODIFICAR"
-    }
-  ],
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY1Mjg5NDcsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6MX0.z_E75j-8k8hh3gB3Si4vB5CEbdWzDyDMIvQb6zd6gzI",
-  "rol": "ADMIN"
+  "mensaje": "Credenciales invalidas"
 }
 #+end_src
 
