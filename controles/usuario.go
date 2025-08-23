@@ -6,9 +6,7 @@ import (
 		"fran/sqlstruct"
 		"fran/utils"
 		"net/http"
-		"time"
 		_ "github.com/go-sql-driver/mysql"
-		"github.com/golang-jwt/jwt/v5"
 		"github.com/labstack/echo/v4"
 		log "github.com/sirupsen/logrus"
 		"golang.org/x/crypto/bcrypt"
@@ -49,14 +47,6 @@ type UsuarioDetalladoRes struct {
 		Permisos []RolOPermiso `json:"permisos" form:"permisos"`
 }
 
-type Sesion struct {
-		Usuario_id int `json:"usuario_id" form:"usuario_id"`
-		Refresh_token string `json:"refresh_token" form:"refresh_token"`
-		Creado time.Time `json:"creado" form:"creado"`
-		Expira time.Time `json:"expira" form:"expira"`
-		Activo bool `json:"activo" form:"activo"`
-}
-
 type LoginRequest struct {
 		Usuario string `json:"usuario"`
 		Contra string `json:"contra"`
@@ -83,100 +73,6 @@ func getUsuario(campo string, valor string) (UsuarioDetallado, error) {
 				return u,err
 		}
 		return u,nil
-}
-
-func encriptar(contra string) (string, error){
-		bytes_hash, err := bcrypt.GenerateFromPassword([]byte(contra), 15)
-		return string(bytes_hash), err
-}
-
-func generarJWT(usuario UsuarioDetallado) (access string, refresh string, err error) {
-		accclaims := jwt.MapClaims{
-				"usuario": usuario.Usuario,
-				"tipo": "access",
-				"rol": *usuario.Rol,
-				"permisos": *usuario.Permisos,
-				"exp": time.Now().Add(15 * time.Minute).Unix(),
-		}
-		at := jwt.NewWithClaims(jwt.SigningMethodHS256, accclaims)
-		access, err = at.SignedString(utils.JWTSecret)
-
-		refreshClaims := jwt.MapClaims{
-				"usuario": usuario,
-				"tipo": "refresh",
-				"exp": time.Now().Add(7 * 24 * time.Hour).Unix(),
-		}
-		rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims)
-		refresh, err = rt.SignedString(utils.JWTSecret)
-		aux := Sesion{
-				Usuario_id : usuario.Id,
-				Refresh_token : refresh,
-				Creado : time.Now(),
-				Expira : time.Now().AddDate(0,0,7),
-				Activo : true,
-		}
-		sqlstruct.Alta(aux)
-		return
-}
-
-func RefreshToken(c echo.Context) error {	
-		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		tipo := claims["tipo"].(string)
-		if tipo != "refresh" {
-				return c.JSON(http.StatusUnauthorized, map[string]string{"mensaje":utils.MsjResErrCredInvalidas})
-		}
-
-		usuario, err := getUsuario("u.id", claims["usuario"].(string))
-		if err != nil{
-				log.Error(err)
-				log.Debugf("ApiRes: %v", http.StatusNotFound)
-				return c.JSON(http.StatusNotFound, map[string]string{"mensaje":utils.MsjResErrCredInvalidas})
-		}		
-		
-        access, refresh, err := generarJWT(usuario)
-		
-		var aux []RolOPermiso
-		err = json.Unmarshal([]byte(*usuario.Permisos),&aux)
-		if err != nil {				
-				log.Error(err)
-				log.Debugf("ApiRes: %v", http.StatusInternalServerError)
-				return c.JSON(http.StatusInternalServerError, map[string]string{"mensaje":utils.MsjResErrInterno})
-        }
-		log.Debugf("ApiRes: %v", http.StatusOK)
-        return c.JSON(http.StatusOK, map[string]any{"access_token": access, "refresh_token": refresh, "rol":*usuario.Rol, "permisos": aux})
-		
-}
-
-func FiltroCheck(c echo.Context) error {
-		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		usuario := claims["usuario"].(string)
-		rol := claims["rol"].(string)
-		permisos := claims["permisos"].(string)
-
-		return c.JSON(http.StatusOK, map[string]string{
-				"mensaje": "Filtro Check",
-				"usuario": usuario,
-				"rol": rol,
-				"permisos": permisos,
-		})
-}
-
-func FiltroSuperAdmin(next echo.HandlerFunc) echo.HandlerFunc {
-		return func (c echo.Context) error {
-				user := c.Get("user").(*jwt.Token)
-				claims := user.Claims.(jwt.MapClaims)
-				tipo := claims["tipo"].(string)
-				if tipo != "access" {
-						return c.JSON(http.StatusUnauthorized, map[string]string{"mensaje":utils.MsjResErrCredInvalidas})
-				}	
-				rol := claims["rol"].(string)
-				if rol != "ADMIN" {
-						return c.JSON(http.StatusUnauthorized, map[string]string{"mensaje":utils.MsjResErrNoAutorizado})
-				}		
-				return next(c)
-		}
 }
 
 func Registrar(c echo.Context) error {

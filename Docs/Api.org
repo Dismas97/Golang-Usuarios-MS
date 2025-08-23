@@ -53,11 +53,11 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Fri, 22 Aug 2025 04:21:12 GMT
-Content-Length: 1267
+Date: Sat, 23 Aug 2025 04:42:23 GMT
+Content-Length: 764
 
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MzczNzIsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoiZnJhbiJ9.qZG3BTrXZCkR9d7z1rMhJQALo0zytOsxMsUb1wla8qc",
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU5MjUwNDMsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoxfQ.jY61Ss4HctF072DmKcgFNOJdS4NX6I-weLV2G3zD9Gw",
   "permisos": [
     {
       "id": 1,
@@ -76,7 +76,45 @@ Content-Length: 1267
       "nombre": "USUARIO_MODIFICAR"
     }
   ],
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY0NDEyNzIsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6eyJpZCI6MSwidXN1YXJpbyI6ImZyYW4iLCJjb250cmEiOiIkMmEkMTAkR3d1TFhJbTJwRkJxNUtPVWMyN1ZqT3FpTkF2LnNRM3JqOFlnd29vVmNGN3Z4R2dldmlFcjIiLCJlbWFpbCI6ImZyYW4xQGdtYWlsLmNvbSIsIm5vbWJyZSI6bnVsbCwidGVsZWZvbm8iOm51bGwsImRpcmVjY2lvbiI6bnVsbCwicm9sIjoiQURNSU4iLCJwZXJtaXNvcyI6Ilt7XCJpZFwiOiAxLCBcIm5vbWJyZVwiOiBcIlVTVUFSSU9fQUxUQVwifSx7XCJpZFwiOiAyLCBcIm5vbWJyZVwiOiBcIlVTVUFSSU9fQkFKQVwifSx7XCJpZFwiOiAzLCBcIm5vbWJyZVwiOiBcIlVTVUFSSU9fTElTVEFSXCJ9LHtcImlkXCI6IDQsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19NT0RJRklDQVJcIn1dIn19.iAkPjCViTGEtMGLKCm0ka8uYBqUAC8UJhL43r8DMAPA",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY1Mjg5NDMsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6MX0.-6gb5Cqf5RAxFpBs9JHLPOpMG4Id4dFgbZGTAp8vzSE",
+  "rol": "ADMIN"
+}
+#+end_src
+
+*** Refresh
+#+begin_src verb
+  get /r
+  Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "refresh_token")}}
+#+end_src
+
+#+RESULTS:
+#+begin_src ob-verb-response
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sat, 23 Aug 2025 04:42:27 GMT
+Content-Length: 764
+
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU5MjUwNDcsInBlcm1pc29zIjoiW3tcImlkXCI6IDEsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19BTFRBXCJ9LHtcImlkXCI6IDIsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19CQUpBXCJ9LHtcImlkXCI6IDMsIFwibm9tYnJlXCI6IFwiVVNVQVJJT19MSVNUQVJcIn0se1wiaWRcIjogNCwgXCJub21icmVcIjogXCJVU1VBUklPX01PRElGSUNBUlwifV0iLCJyb2wiOiJBRE1JTiIsInRpcG8iOiJhY2Nlc3MiLCJ1c3VhcmlvIjoxfQ.qIXMkMw8X7AIq0LHdS1NDWcdByImuL6ojPq497oXqsg",
+  "permisos": [
+    {
+      "id": 1,
+      "nombre": "USUARIO_ALTA"
+    },
+    {
+      "id": 2,
+      "nombre": "USUARIO_BAJA"
+    },
+    {
+      "id": 3,
+      "nombre": "USUARIO_LISTAR"
+    },
+    {
+      "id": 4,
+      "nombre": "USUARIO_MODIFICAR"
+    }
+  ],
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTY1Mjg5NDcsInRpcG8iOiJyZWZyZXNoIiwidXN1YXJpbyI6MX0.z_E75j-8k8hh3gB3Si4vB5CEbdWzDyDMIvQb6zd6gzI",
   "rol": "ADMIN"
 }
 #+end_src
@@ -128,7 +166,7 @@ Content-Length: 27
 
 *** Buscar
 #+begin_src verb 
-  get /p/usuario/1
+  get /p/usuario/2
   Authorization: Bearer {{(verb-json-get (oref (verb-stored-response "res-login") body) "access_token")}}
 #+end_src
 
@@ -136,35 +174,23 @@ Content-Length: 27
 #+begin_src ob-verb-response
 HTTP/1.1 200 OK
 Content-Type: application/json
-Date: Fri, 22 Aug 2025 04:22:03 GMT
-Content-Length: 376
+Date: Sat, 23 Aug 2025 04:03:38 GMT
+Content-Length: 276
 
 {
   "datos": {
-    "id": 1,
-    "usuario": "fran",
-    "contra": "$2a$10$GwuLXIm2pFBq5KOUc27VjOqiNAv.sQ3rj8YgwooVcF7vxGgeviEr2",
-    "email": "fran1@gmail.com",
+    "id": 2,
+    "usuario": "fran2",
+    "contra": "$2a$10$3Y0ACtiagET0hasOs2zs3OXFj18gUGZX247OeNQS6DW0M..IcVbKO",
+    "email": "fran2@gmail.com",
     "nombre": null,
     "telefono": null,
     "direccion": null,
-    "rol": "ADMIN",
+    "rol": "EMPLEADO",
     "permisos": [
-      {
-        "id": 1,
-        "nombre": "USUARIO_ALTA"
-      },
-      {
-        "id": 2,
-        "nombre": "USUARIO_BAJA"
-      },
       {
         "id": 3,
         "nombre": "USUARIO_LISTAR"
-      },
-      {
-        "id": 4,
-        "nombre": "USUARIO_MODIFICAR"
       }
     ]
   },

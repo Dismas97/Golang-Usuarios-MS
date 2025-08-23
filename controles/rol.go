@@ -62,6 +62,7 @@ func BuscarRol(c echo.Context) error {
 						"mensaje":utils.MsjResExito,
 						"datos":res})
 }
+
 func BuscarPermiso(c echo.Context) error {
 		id := c.Param("id")		
 		log.Debug("BuscarPermiso")

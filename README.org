@@ -56,9 +56,11 @@ CLOSED: [2025-08-17 dom 20:43]
 *** Campos Modificar
 Actualmente modifica mal
 ** TODO Terminar refresh/access tokens
-*** Falta ruta [[file:controles/usuario.go::func RefreshToken(c echo.Context) error {][refresh]]
-*** Falta actualizar sesion a inactiva cuando expira en bd
-*** Agregar ruta logout para invalidar access tokens
+*** DONE Falta ruta [[file:controles/usuario.go::func RefreshToken(c echo.Context) error {][refresh]]
+CLOSED: [2025-08-23 sáb 01:43]
+*** DONE Falta actualizar sesion a inactiva cuando expira en bd
+CLOSED: [2025-08-23 sáb 01:43]
+*** TODO Agregar ruta logout para invalidar access tokens
 ** TODO Agregar aduitoria
 *** Registrar acciones de usuarios en bd
 ** TODO Control de numero de peticiones por ip/cliente

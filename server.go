@@ -72,7 +72,10 @@ func main() {
 		
 		e.POST("/login", controles.Login)
 		e.POST("/registrar", controles.Registrar)
-		e.GET("",controles.FiltroCheck)
+		
+		grupoR := e.Group("/r")
+		grupoR.Use(echojwt.JWT(utils.JWTSecret))
+		grupoR.GET("", controles.RefreshToken)
 		
 		grupoP := e.Group("/p")
 		grupoP.Use(echojwt.JWT(utils.JWTSecret))
