@@ -9,11 +9,13 @@ import (
 	"io"
 	"os"
 	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/time/rate"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -21,10 +23,11 @@ type Config struct {
 		ServerPort int `json:"server_port"`
 		DBPort int `json:"db_port"`
 		DB string `json:"db"`
-		MaxCon int `json:"max_con"`
+		DBMaxCon int `json:"db_max_con"`
 		DBUsuario string `json:"db_usuario"`
 		DBContra string `json:"db_contra"`
 		JWTSecret string `json:"jwt_secret"`
+		LimPeticiones int `json:"limite_peticiones"`
 }
 var err error = nil
 
@@ -59,8 +62,8 @@ func main() {
 		}
 		defer utils.BD.Close()
 
-		utils.BD.SetMaxOpenConns(config.MaxCon)
-		utils.BD.SetMaxIdleConns(config.MaxCon)
+		utils.BD.SetMaxOpenConns(config.DBMaxCon)
+		utils.BD.SetMaxIdleConns(config.DBMaxCon)
 		utils.BD.SetConnMaxLifetime(5 * time.Minute)
 
 		if err := utils.BD.Ping(); err != nil {
@@ -69,6 +72,7 @@ func main() {
 		
 		e := echo.New()
 		e.Use(middleware.Logger())
+		e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(config.LimPeticiones))))
 		
 		e.POST("/login", controles.Login)
 		e.POST("/registrar", controles.Registrar)

@@ -84,7 +84,7 @@ func generarJWT(usuario UsuarioDetallado) (access string, refresh string, err er
 				Usuario_id : usuario.Id,
 				Refresh_token : refresh,
 				Creado : time.Now(),
-				Expira : time.Now().Add(7 * 24 * time.Hour),
+				Expira : time.Now().AddDate(0,0,7),
 				Activo : true,
 		}
 		sqlstruct.Alta(aux)

@@ -17,12 +17,13 @@ Este proyecto incluye el servidor y la bd correspondiente
 #+begin_src json :tangle config.json
   {
     "server_port": 4567,
-    "db": "ServicioLoginDB",
+    "db": "Autenticacion",
     "db_port": 3306,
     "db_usuario": "root",
     "db_contra": "root",
-    "max_con": 50,
-    "jwt_secret": "clave-secreta-123"
+    "db_max_con": 50,
+    "jwt_secret": "clave-secreta-123",
+    "limite" : 20
 }
 #+end_src
 
@@ -61,9 +62,10 @@ CLOSED: [2025-08-23 sáb 01:43]
 *** DONE Falta actualizar sesion a inactiva cuando expira en bd
 CLOSED: [2025-08-23 sáb 01:43]
 *** TODO Agregar ruta logout para invalidar access tokens
-** TODO Agregar aduitoria
+** TODO Agregar auditoría
 *** Registrar acciones de usuarios en bd
-** TODO Control de numero de peticiones por ip/cliente
+** DONE Control de numero de peticiones por ip/cliente
+CLOSED: [2025-08-23 sáb 20:27]
 *** Limitar a maximo unas 20? peticiones por minuto?
 ** TODO Utilizar campo estado activo/inactivo de la bd
 *** Usuario inactivo no deberia poder loguearse

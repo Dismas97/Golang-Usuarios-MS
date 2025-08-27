@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS ServicioLoginDB;
-CREATE DATABASE ServicioLoginDB;
-USE ServicioLoginDB;
+DROP DATABASE IF EXISTS Autenticacion;
+CREATE DATABASE Autenticacion;
+USE Autenticacion;
 
 CREATE TABLE Usuario(
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,7 +42,6 @@ CREATE TABLE RolPermiso (
     FOREIGN KEY (permiso_id) REFERENCES Permiso(id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE Sesion (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -52,3 +51,12 @@ CREATE TABLE Sesion (
     activo BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
 );
+
+DELIMITER $$
+DROP EVENT IF EXISTS desactivar_sesiones_expiradas;
+CREATE EVENT desactivar_sesiones_expiradas
+ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP
+DO UPDATE Sesion SET activo = FALSE WHERE expira < NOW() AND activo = TRUE;
+$$
+
+DELIMITER ;
